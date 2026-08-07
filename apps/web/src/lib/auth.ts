@@ -1,11 +1,8 @@
 import { env } from '$env/dynamic/private';
 import { betterAuth } from 'better-auth/minimal';
-import { createAuthClient } from 'better-auth/svelte';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import { prismaAdapter } from '@better-auth/prisma-adapter';
-import { resolve } from '$app/paths';
-
 import { prisma } from '@bridgeops/database';
 import { dash } from "@better-auth/infra";
 
