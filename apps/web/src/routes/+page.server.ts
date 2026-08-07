@@ -34,13 +34,15 @@ export const actions = {
         }
 
         try {
-            await auth.api.signInEmail({
+            const response = await auth.api.signInEmail({
                 body: {
                     email,
                     password,
                     callbackURL: '/'
                 }
             });
+
+            console.log('Login response:', response);
         } catch (error) {
             return fail(400, {
                 message: error instanceof Error ? error.message : 'Login failed',
