@@ -1,5 +1,5 @@
 {
-  "name": "@incident/database",
+  "name": "@bridgeops/database",
   "private": true,
   "type": "module",
   "scripts": {

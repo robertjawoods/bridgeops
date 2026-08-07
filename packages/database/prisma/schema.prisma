@@ -51,15 +51,15 @@ enum NotificationStatus {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  image     String?
-
-  sessions Session[]
-  accounts Account[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  image         String?
+  emailVerified Boolean   @default(false)
+  sessions      Session[]
+  accounts      Account[]
 
   memberships Membership[]
 
@@ -69,7 +69,6 @@ model User {
 
   @@map("user")
 }
-
 
 model Session {
   id        String   @id

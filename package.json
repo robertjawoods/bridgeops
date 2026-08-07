@@ -6,7 +6,8 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
-    "format": "turbo format"
+    "format": "turbo format",
+    "generate": "pnpm --filter @bridgeops/database generate"
   },
   "devDependencies": {
     "turbo": "^2",
