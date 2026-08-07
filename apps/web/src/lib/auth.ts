@@ -1,12 +1,17 @@
 import { env } from '$env/dynamic/private';
 import { betterAuth } from 'better-auth/minimal';
 import { createAuthClient } from 'better-auth/svelte';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import { prismaAdapter } from '@better-auth/prisma-adapter';
+import { resolve } from '$app/paths';
 
 import { prisma } from '@bridgeops/database';
+import { dash } from "@better-auth/infra";
+
+import { Resend } from 'resend';
+
+const resend = new Resend(env.RESEND_KEY);
 
 export const auth = betterAuth({
 	baseURL: env.ORIGIN,
@@ -15,18 +20,22 @@ export const auth = betterAuth({
 		provider: 'postgresql',
 	}),
 	emailAndPassword: { enabled: true },
-	socialProviders: {
-		github: {
-			clientId: env.GITHUB_CLIENT_ID,
-			clientSecret: env.GITHUB_CLIENT_SECRET
+	emailVerification: {
+		sendVerificationEmail: async ({ user, url, token }, request) => {
+			resend.emails.send({
+				from: 'onboarding@resend.dev',
+				to: user.email,
+				subject: 'Hello World',
+				html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
+			});
 		}
 	},
+
+	trustedOrigins: ['http://localhost:5173', 'https://zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
 	plugins: [
+		dash({
+			apiKey: env.BETTER_AUTH_API_KEY,
+		}),
 		sveltekitCookies(getRequestEvent) // make sure this is the last plugin in the array
 	]
-});
-
-
-export const authClient = createAuthClient({
-	
 });

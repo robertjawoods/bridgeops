@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "DEBUG=vite-plugin-sveltekit:* vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -42,8 +42,10 @@
 		"vite": "^8.0.16"
 	},
 	"dependencies": {
+		"@better-auth/infra": "^0.3.7",
 		"@better-auth/prisma-adapter": "^1.6.26",
 		"@bridgeops/database": "workspace:*",
-		"@prisma/adapter-pg": "^7.9.1"
+		"@prisma/adapter-pg": "^7.9.1",
+		"resend": "^6.18.1"
 	}
 }
