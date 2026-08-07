@@ -1,11 +1,12 @@
 import { env } from '$env/dynamic/private';
 import { betterAuth } from 'better-auth/minimal';
+import { createAuthClient } from 'better-auth/svelte';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import { prismaAdapter } from '@better-auth/prisma-adapter';
 
-import { prisma } from '@incident/database';
+import { prisma } from '@bridgeops/database';
 
 export const auth = betterAuth({
 	baseURL: env.ORIGIN,
@@ -23,4 +24,9 @@ export const auth = betterAuth({
 	plugins: [
 		sveltekitCookies(getRequestEvent) // make sure this is the last plugin in the array
 	]
+});
+
+
+export const authClient = createAuthClient({
+	
 });
