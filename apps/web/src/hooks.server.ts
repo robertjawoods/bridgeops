@@ -1,10 +1,11 @@
-import 'varlock/auto-load';
 import type { Handle } from '@sveltejs/kit';
 import { building } from '$app/environment';
-import { auth } from '$lib/auth';
+import { auth, authClient } from '$lib/auth';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 
 const handleBetterAuth: Handle = async ({ event, resolve }) => {
+	event.locals.authClient = authClient;
+
 	const session = await auth.api.getSession({ headers: event.request.headers });
 
 	if (session) {
