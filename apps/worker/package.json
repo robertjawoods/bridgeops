@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.26.2",
   "dependencies": {
     "bullmq": "^6.0.8",
     "ioredis": "^6.0.0"
