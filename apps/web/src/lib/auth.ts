@@ -9,22 +9,34 @@ import { dash } from "@better-auth/infra";
 import { Resend } from 'resend';
 
 const resend = new Resend(env.RESEND_KEY);
+const normalizedOrigin = env.ORIGIN?.replace(/\/+$/, '');
 
 export const auth = betterAuth({
-	baseURL: env.ORIGIN,
+	baseURL: {
+		allowedHosts: ['localhost:5173', 'zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
+		fallback: normalizedOrigin,
+		protocol: 'auto'
+	},
 	secret: env.BETTER_AUTH_SECRET,
 	database: prismaAdapter(prisma, {
 		provider: 'postgresql',
 	}),
 	emailAndPassword: { enabled: true },
 	emailVerification: {
+		sendOnSignUp: true,
 		sendVerificationEmail: async ({ user, url, token }, request) => {
-			resend.emails.send({
-				from: 'onboarding@resend.dev',
-				to: user.email,
-				subject: 'Hello World',
-				html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
-			});
+			console.log('Sending verification email to:', user.email);
+			
+			const send = () => {
+				resend.emails.send({
+					from: 'onboarding@resend.dev',
+					to: user.email,
+					subject: 'BridgeOps - Verify your email',
+					html: `<p>Click <a href="${url}">here</a> to verify your email.</p>`
+				});
+			}
+			
+			send();
 		}
 	},
 
