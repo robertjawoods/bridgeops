@@ -39,7 +39,12 @@ export const auth = betterAuth({
 			send();
 		}
 	},
-
+	socialProviders: {
+		github: {
+			clientId: env.GITHUB_CLIENT_ID,
+			clientSecret: env.GITHUB_CLIENT_SECRET,
+		},
+	},
 	trustedOrigins: ['http://localhost:5173', 'https://zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
 	plugins: [
 		dash({
