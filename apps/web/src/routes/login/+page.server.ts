@@ -1,26 +1,20 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { auth } from '$lib/auth';
-import type { Actions, PageServerLoad } from './$types';
+import type { Actions } from './$types';
 
 const getLoginFormData = async (event: any) => {
     const formData = await event.request.formData();
-
+    const name = formData.get('name')?.toString().trim() ?? '';
     const email = formData.get('email')?.toString().trim() ?? '';
     const password = formData.get('password')?.toString() ?? '';
-    const redirectTo = formData.get('redirectTo')?.toString() ?? '/';
 
-    return { email, password, redirectTo };
-};
-
-export const load: PageServerLoad = ({ url }) => {
-    return {
-        redirectTo: url.searchParams.get('redirectTo') ?? '/'
-    };
-};
+    return { name, email, password };
+}
 
 export const actions = {
     login: async (event) => {
-        const { email, password, redirectTo } = await getLoginFormData(event);
+        const { email, password } = await getLoginFormData(event);
+        console.log(`Login attempt for email: ${email}`);
 
         const fieldErrors: Record<string, string> = {};
 
@@ -40,93 +34,23 @@ export const actions = {
         }
 
         try {
-            await auth.api.signInEmail({
+            const response = await auth.api.signInEmail({
                 body: {
                     email,
-                    password
-                }, 
-                request: event.request,
+                    password,
+                    callbackURL: '/'
+                }
             });
 
+            console.log('Login response:', response);
         } catch (error) {
             return fail(400, {
                 message: error instanceof Error ? error.message : 'Login failed',
                 fieldErrors: {}
             });
         }
-
-        redirect(303, redirectTo);
-    },
-    magicLink: async (event) => {
-        const { email, redirectTo } = await getLoginFormData(event);
-
-        const fieldErrors: Record<string, string> = {};
-
-        if (!email) {
-            fieldErrors.email = 'Email is required';
-        }
-
-        if (Object.keys(fieldErrors).length > 0) {
-            return fail(400, {
-                message: 'Please fix the highlighted fields',
-                fieldErrors
-            });
-        }
-
-        try {
-            await auth.api.signInMagicLink({
-                body: {
-                    email,
-                    callbackURL: redirectTo
-                },
-                headers: event.request.headers
-            });
-        }
-        catch (error) {
-            return fail(400, {
-                message: error instanceof Error ? error.message : 'Could not send magic link',
-                fieldErrors: {}
-            });
-        }
-
         return {
-            message: 'Check your email for a magic link'
-        };
-    },
-    forgotPassword: async (event) => {
-        const { email } = await getLoginFormData(event);
-
-        const fieldErrors: Record<string, string> = {};
-
-        if (!email) {
-            fieldErrors.email = 'Email is required';
-        }
-
-        if (Object.keys(fieldErrors).length > 0) {
-            return fail(400, {
-                message: 'Please fix the highlighted fields',
-                fieldErrors
-            });
-        }
-
-        try {
-            await auth.api.requestPasswordReset({
-                body: {
-                    email,
-                    redirectTo: '/reset-password'
-                },
-                headers: event.request.headers
-            })
-        }
-        catch (error) {
-            return fail(400, {
-                message: error instanceof Error ? error.message : 'Could not send magic link',
-                fieldErrors: {}
-            });
-        }
-
-        return {
-            message: 'Check your email for a reset link'
+            message: 'User logged in successfully'
         };
     }
 } satisfies Actions;
