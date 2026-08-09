@@ -2,6 +2,7 @@
   "name": "incident-hub",
   "private": true,
   "scripts": {
+    "predev": "node scripts/env-setup.js",
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
