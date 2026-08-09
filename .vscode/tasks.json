@@ -1,0 +1,76 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Railway: Postgres Tunnel + Prisma Env Sync",
+      "type": "shell",
+      "command": "bash scripts/railway-prisma-tunnel.sh",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      },
+      "problemMatcher": [
+        {
+          "owner": "custom",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}"
+          ],
+          "pattern": {
+            "regexp": "^(.+)$",
+            "file": 1,
+            "message": 1
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^Starting Railway Postgres tunnel$",
+            "endsPattern": "^Prisma DATABASE_URL updated:"
+          }
+        }
+      ]
+    },
+    {
+      "label": "Dev: pnpm dev",
+      "type": "shell",
+      "command": "pnpm dev",
+      "isBackground": true,
+      "dependsOn": [
+        "Railway: Postgres Tunnel + Prisma Env Sync"
+      ],
+      "dependsOrder": "sequence",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
+    },
+    {
+      "label": "Tunnel: ngrok 5173",
+      "type": "shell",
+      "command": "ngrok http --url=zeke-monohydroxy-unscrupulously.ngrok-free.dev 5173",
+      "isBackground": true,
+      "dependsOn": [
+        "Railway: Postgres Tunnel + Prisma Env Sync"
+      ],
+      "dependsOrder": "sequence",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
+    },
+    {
+      "label": "Run: IncidentHub Local Stack",
+      "type": "shell",
+      "command": "echo Starting IncidentHub local stack",
+      "dependsOn": [
+        "Dev: pnpm dev",
+        "Tunnel: ngrok 5173"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}
