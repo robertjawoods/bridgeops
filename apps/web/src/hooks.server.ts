@@ -1,3 +1,4 @@
+import 'varlock/auto-load';
 import type { Handle } from '@sveltejs/kit';
 import { building } from '$app/environment';
 import { auth } from '$lib/auth';
