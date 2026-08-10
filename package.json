@@ -1,5 +1,5 @@
 {
-  "name": "incident-hub",
+  "name": "bridgeops",
   "private": true,
   "scripts": {
     "predev": "pnpm exec varlock load --agent",
