@@ -4,10 +4,15 @@
     {
       "label": "Railway: Postgres Tunnel + Prisma Env Sync",
       "type": "shell",
+      "icon": {
+        "id": "database",
+        "color": "terminal.ansiMagenta"
+      },
       "command": "bash scripts/railway-prisma-tunnel.sh",
       "isBackground": true,
       "presentation": {
         "reveal": "always",
+        "group": "bridgeops-stack",
         "panel": "dedicated",
         "clear": false
       },
@@ -19,14 +24,13 @@
             "${workspaceFolder}"
           ],
           "pattern": {
-            "regexp": "^(.+)$",
-            "file": 1,
+            "regexp": "^(?:\\[ERR\\]|ERR|ERROR|Error|FAIL|Failed)[:\\s]+(.+)$",
             "message": 1
           },
           "background": {
             "activeOnStart": true,
             "beginsPattern": "^Starting Railway Postgres tunnel$",
-            "endsPattern": "^Prisma DATABASE_URL updated:"
+            "endsPattern": "^Prisma DATABASE_URL updated:.*$"
           }
         }
       ]
@@ -34,6 +38,10 @@
     {
       "label": "Dev: pnpm dev",
       "type": "shell",
+      "icon": {
+        "id": "rocket",
+        "color": "terminal.ansiGreen"
+      },
       "command": "pnpm dev",
       "isBackground": true,
       "dependsOn": [
@@ -42,6 +50,7 @@
       "dependsOrder": "sequence",
       "presentation": {
         "reveal": "always",
+        "group": "bridgeops-stack",
         "panel": "dedicated",
         "clear": false
       }
@@ -49,6 +58,10 @@
     {
       "label": "Tunnel: ngrok 5173",
       "type": "shell",
+      "icon": {
+        "id": "globe",
+        "color": "terminal.ansiCyan"
+      },
       "command": "ngrok http --url=zeke-monohydroxy-unscrupulously.ngrok-free.dev 5173",
       "isBackground": true,
       "dependsOn": [
@@ -57,14 +70,19 @@
       "dependsOrder": "sequence",
       "presentation": {
         "reveal": "always",
+        "group": "bridgeops-stack",
         "panel": "dedicated",
         "clear": false
       }
     },
     {
-      "label": "Run: IncidentHub Local Stack",
+      "label": "Run: BridgeOps Local Stack",
       "type": "shell",
-      "command": "echo Starting IncidentHub local stack",
+      "icon": {
+        "id": "play-circle",
+        "color": "terminal.ansiBlue"
+      },
+      "command": "echo Starting BridgeOps local stack",
       "dependsOn": [
         "Dev: pnpm dev",
         "Tunnel: ngrok 5173"

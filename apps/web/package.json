@@ -48,10 +48,15 @@
 		"@better-auth/infra": "^0.3.7",
 		"@better-auth/prisma-adapter": "^1.6.26",
 		"@bridgeops/database": "workspace:*",
+		"@fontsource/inter": "^5.3.0",
+		"@fontsource/inter-tight": "^5.3.0",
 		"@prisma/adapter-pg": "^7.9.1",
 		"resend": "^6.18.1"
 	},
 	"varlock": {
-		"loadPath": ["./", "../../packages/database"]
+		"loadPath": [
+			"./",
+			"../../packages/database"
+		]
 	}
 }
