@@ -28,7 +28,7 @@
 	} = $props();
 
 	const fieldErrors = $derived((form?.fieldErrors ?? {}) as FieldErrors);
-	const hasFieldErrors = $derived(() => Object.keys(fieldErrors).length > 0);
+	const hasFieldErrors = $derived(Object.keys(fieldErrors).length > 0);
 
 	const handleGitHubClick = async () => {
 		await authClient.signIn.social({
@@ -45,75 +45,75 @@
 
 <div class="mx-auto max-w-md space-y-4">
 	{#if heading}
-		<h1 class="text-center text-3xl font-bold text-slate-900">{heading}</h1>
+		<h1 class="text-center text-4xl text-white">{heading}</h1>
 	{/if}
 
 	<form
 		method="POST"
 		{action}
 		use:enhance
-		class="flex flex-col gap-4 rounded-md border p-4 shadow-md"
+		class="flex flex-col gap-5 rounded-[16px] border border-[#1f2433] bg-[#151621] p-5"
 	>
 		{#if showName}
 			<label class="flex flex-col gap-1">
-				<span class="text-sm font-medium text-slate-700">Name</span>
+				<span class="text-sm font-medium text-[#c9d3ee]">Name</span>
 				<input
 					type="text"
 					name="name"
 					placeholder="Name"
-					class={`rounded border px-3 py-2 ${fieldErrors.name ? 'border-red-500' : 'border-slate-300'}`}
+					class={`rounded-[10px] border bg-[#0f101a] px-4 py-3 text-white placeholder:text-[#646e87] focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none ${fieldErrors.name ? 'border-red-500' : 'border-[#1f2433]'}`}
 				/>
 				{#if fieldErrors.name}
-					<span class="text-sm text-red-600">{fieldErrors.name}</span>
+					<span class="text-sm text-red-400">{fieldErrors.name}</span>
 				{/if}
 			</label>
 		{/if}
 
 		<label class="flex flex-col gap-1">
-			<span class="text-sm font-medium text-slate-700">Email</span>
+			<span class="text-sm font-medium text-[#c9d3ee]">Email</span>
 			<input
 				type="email"
 				name="email"
 				placeholder="Email"
 				required
-				class={`rounded border px-3 py-2 ${fieldErrors.email ? 'border-red-500' : 'border-slate-300'}`}
+				class={`rounded-[10px] border bg-[#0f101a] px-4 py-3 text-white placeholder:text-[#646e87] focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none ${fieldErrors.email ? 'border-red-500' : 'border-[#1f2433]'}`}
 			/>
 			{#if fieldErrors.email}
-				<span class="text-sm text-red-600">{fieldErrors.email}</span>
+				<span class="text-sm text-red-400">{fieldErrors.email}</span>
 			{/if}
 		</label>
 
 		<label class="flex flex-col gap-1">
-			<span class="text-sm font-medium text-slate-700">Password</span>
+			<span class="text-sm font-medium text-[#c9d3ee]">Password</span>
 			<input
 				type="password"
 				name="password"
 				placeholder="Password"
 				required
-				class={`rounded border px-3 py-2 ${fieldErrors.password ? 'border-red-500' : 'border-slate-300'}`}
+				class={`rounded-[10px] border bg-[#0f101a] px-4 py-3 text-white placeholder:text-[#646e87] focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none ${fieldErrors.password ? 'border-red-500' : 'border-[#1f2433]'}`}
 			/>
 			{#if fieldErrors.password}
-				<span class="text-sm text-red-600">{fieldErrors.password}</span>
+				<span class="text-sm text-red-400">{fieldErrors.password}</span>
 			{/if}
 		</label>
 
 		<button
 			type="submit"
-			class="bg-slate-900 px-4 py-2 font-bold text-white transition hover:bg-slate-700"
+			class="rounded-[9999px] bg-[linear-gradient(353deg,rgb(91,99,211)_17.51%,rgb(124,135,247)_183.08%)] px-5 py-3 text-base font-medium text-white shadow-[rgba(255,255,255,0.25)_0_1px_3px_0_inset] transition hover:brightness-110"
 		>
 			{submitLabel}
 		</button>
 
-		<div class="flex items-center gap-3 text-sm text-slate-400">
-			<div class="h-px flex-1 bg-slate-200"></div>
+		<div class="flex items-center gap-3 text-sm text-[#646e87]">
+			<div class="h-px flex-1 bg-[#1f2433]"></div>
 			<span>or</span>
-			<div class="h-px flex-1 bg-slate-200"></div>
+			<div class="h-px flex-1 bg-[#1f2433]"></div>
 		</div>
 
 		<button
 			type="button"
-			on:click={handleGitHubClick}
-			class="flex items-center justify-center gap-3 rounded-md border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50 focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 focus:outline-none"
+			onclick={handleGitHubClick}
+			class="flex items-center justify-center gap-3 rounded-[10px] border border-[#1f2433] bg-[#0f101a] px-4 py-3 font-medium text-[#c9d3ee] transition hover:border-[#939db8] hover:text-white focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none"
 		>
 			<svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5 fill-current">
 				<path
@@ -125,7 +125,8 @@
 
 		<button
 			type="button"
-			class="flex items-center justify-center gap-3 rounded-md border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 focus:outline-none"
+			onclick={handleGoogleClick}
+			class="flex items-center justify-center gap-3 rounded-[10px] border border-[#1f2433] bg-[#0f101a] px-4 py-3 font-medium text-[#c9d3ee] transition hover:border-[#939db8] hover:text-white focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none"
 		>
 			<svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5">
 				<path
@@ -149,15 +150,15 @@
 		</button>
 	</form>
 
-	<p class="text-center text-sm text-slate-600">
-		<a href={alternateHref} class="font-medium text-slate-900 underline underline-offset-4">
+	<p class="text-center text-sm text-[#646e87]">
+		<a href={alternateHref} class="font-medium text-[#98a4f7] underline underline-offset-4">
 			{alternateLabel}
 		</a>
 	</p>
 
 	{#if form?.message}
 		<p
-			class={`min-h-6 text-center text-sm ${$hasFieldErrors ? 'text-red-600' : 'text-emerald-700'}`}
+			class={`min-h-6 text-center text-sm ${hasFieldErrors ? 'text-red-400' : 'text-[#c9d3ee]'}`}
 		>
 			{form.message}
 		</p>
