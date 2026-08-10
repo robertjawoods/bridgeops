@@ -1,4 +1,3 @@
-import { env } from '$env/dynamic/private';
 import { betterAuth } from 'better-auth/minimal';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
@@ -7,9 +6,10 @@ import { prisma } from '@bridgeops/database';
 import { dash } from "@better-auth/infra";
 
 import { Resend } from 'resend';
+import { ENV } from 'varlock/env';
 
-const resend = new Resend(env.RESEND_KEY);
-const normalizedOrigin = env.ORIGIN?.replace(/\/+$/, '');
+const resend = new Resend(ENV.RESEND_KEY);
+const normalizedOrigin = ENV.ORIGIN?.replace(/\/+$/, '');
 
 export const auth = betterAuth({
 	baseURL: {
@@ -17,7 +17,7 @@ export const auth = betterAuth({
 		fallback: normalizedOrigin,
 		protocol: 'auto'
 	},
-	secret: env.BETTER_AUTH_SECRET,
+	secret: ENV.BETTER_AUTH_SECRET,
 	database: prismaAdapter(prisma, {
 		provider: 'postgresql',
 	}),
@@ -41,14 +41,14 @@ export const auth = betterAuth({
 	},
 	socialProviders: {
 		github: {
-			clientId: env.GITHUB_CLIENT_ID,
-			clientSecret: env.GITHUB_CLIENT_SECRET,
+			clientId: ENV.GITHUB_CLIENT_ID ?? '',
+			clientSecret: ENV.GITHUB_CLIENT_SECRET ?? '',
 		},
 	},
 	trustedOrigins: ['http://localhost:5173', 'https://zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
 	plugins: [
 		dash({
-			apiKey: env.BETTER_AUTH_API_KEY,
+			apiKey: ENV.BETTER_AUTH_API_KEY,
 		}),
 		sveltekitCookies(getRequestEvent) // make sure this is the last plugin in the array
 	]
