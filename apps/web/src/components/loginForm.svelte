@@ -17,7 +17,8 @@
 		alternateHref,
 		alternateLabel,
 		heading,
-		redirectTo = '/'
+		magicLinkAction,
+		redirectTo = '/dashboard'
 	}: {
 		form: LoginFormData | null;
 		action: string;
@@ -26,6 +27,7 @@
 		alternateHref: string;
 		alternateLabel: string;
 		heading?: string;
+		magicLinkAction?: string;
 		redirectTo?: string;
 	} = $props();
 
@@ -113,6 +115,17 @@
 			<span>or</span>
 			<div class="h-px flex-1 bg-[#1f2433]"></div>
 		</div>
+
+		{#if magicLinkAction}
+			<button
+				type="submit"
+				formaction={magicLinkAction}
+				formnovalidate
+				class="flex items-center justify-center gap-3 rounded-[10px] border border-[#1f2433] bg-[#0f101a] px-4 py-3 font-medium text-[#c9d3ee] transition hover:border-[#939db8] hover:text-white focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none"
+			>
+				<span>Generate Magic Link</span>
+			</button>
+		{/if}
 
 		<button
 			type="button"

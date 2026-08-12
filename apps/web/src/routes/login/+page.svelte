@@ -9,6 +9,7 @@
 	<LoginForm
 		{form}
 		action="?/login"
+		magicLinkAction="?/magicLink"
 		submitLabel="Log in"
 		alternateHref="/signup"
 		alternateLabel="Need an account? Sign up"
