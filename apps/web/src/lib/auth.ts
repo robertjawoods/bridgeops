@@ -4,6 +4,7 @@ import { getRequestEvent } from '$app/server';
 import { prismaAdapter } from '@better-auth/prisma-adapter';
 import { prisma } from '@bridgeops/database';
 import { dash } from "@better-auth/infra";
+import { magicLink } from "better-auth/plugins";
 
 import { Resend } from 'resend';
 import { ENV } from 'varlock/env';
@@ -26,16 +27,16 @@ export const auth = betterAuth({
 		sendOnSignUp: true,
 		sendVerificationEmail: async ({ user, url, token }, request) => {
 			console.log('Sending verification email to:', user.email);
-			
-			const send = () => {
-				resend.emails.send({
-					from: 'onboarding@resend.dev',
+
+			const send = async () => {
+				await resend.emails.send({
+					from: 'bridgeops@resend.dev',
 					to: user.email,
 					subject: 'BridgeOps - Verify your email',
 					html: `<p>Click <a href="${url}">here</a> to verify your email.</p>`
 				});
 			}
-			
+
 			send();
 		}
 	},
@@ -53,6 +54,20 @@ export const auth = betterAuth({
 	plugins: [
 		dash({
 			apiKey: ENV.BETTER_AUTH_API_KEY,
+		}),
+		magicLink({
+			sendMagicLink: async ({ email, url }) => {
+				const send = async () => {
+					await resend.emails.send({
+						from: 'bridgeops@resend.dev',
+						to: email,
+						subject: 'BridgeOps - Magic Link',
+						html: `<p>Click <a href="${url}">here</a> to sign in</p>`
+					});
+				}
+
+				send();
+			}
 		}),
 		sveltekitCookies(getRequestEvent) // make sure this is the last plugin in the array
 	]
