@@ -44,6 +44,10 @@ export const auth = betterAuth({
 			clientId: ENV.GITHUB_CLIENT_ID ?? '',
 			clientSecret: ENV.GITHUB_CLIENT_SECRET ?? '',
 		},
+		google: {
+			clientId: ENV.GOOGLE_CLIENT_ID ?? '',
+			clientSecret: ENV.GOOGLE_CLIENT_SECRET ?? ''
+		},
 	},
 	trustedOrigins: ['http://localhost:5173', 'https://zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
 	plugins: [
