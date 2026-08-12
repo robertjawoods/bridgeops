@@ -16,7 +16,8 @@
 		showName = false,
 		alternateHref,
 		alternateLabel,
-		heading
+		heading,
+		redirectTo = '/'
 	}: {
 		form: LoginFormData | null;
 		action: string;
@@ -25,6 +26,7 @@
 		alternateHref: string;
 		alternateLabel: string;
 		heading?: string;
+		redirectTo?: string;
 	} = $props();
 
 	const fieldErrors = $derived((form?.fieldErrors ?? {}) as FieldErrors);
@@ -33,14 +35,16 @@
 	const handleGitHubClick = async () => {
 		await authClient.signIn.social({
 			provider: 'github',
+			callbackURL: redirectTo
 		});
 	};
 
-    const handleGoogleClick = async () => {
-        await authClient.signIn.social({
-            provider: 'google',
-        });
-    };
+	const handleGoogleClick = async () => {
+		await authClient.signIn.social({
+			provider: 'google',
+			callbackURL: redirectTo
+		});
+	};
 </script>
 
 <div class="mx-auto max-w-md space-y-4">
@@ -148,6 +152,7 @@
 			</svg>
 			<span>Continue with Google</span>
 		</button>
+		<input type="hidden" name="redirectTo" value={redirectTo} />
 	</form>
 
 	<p class="text-center text-sm text-[#646e87]">
@@ -157,9 +162,7 @@
 	</p>
 
 	{#if form?.message}
-		<p
-			class={`min-h-6 text-center text-sm ${hasFieldErrors ? 'text-red-400' : 'text-[#c9d3ee]'}`}
-		>
+		<p class={`min-h-6 text-center text-sm ${hasFieldErrors ? 'text-red-400' : 'text-[#c9d3ee]'}`}>
 			{form.message}
 		</p>
 	{/if}
