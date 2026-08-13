@@ -1,15 +1,18 @@
 import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import pino from 'pino';
+import { createApp } from './app';
 
-const app = new Hono()
-
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
+const rootLogger = pino({
+  transport: {
+    target: 'pino-pretty'
+  }
 })
+
+const app = createApp({ rootLogger });
 
 serve({
   fetch: app.fetch,
   port: 3000
 }, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
+  rootLogger.info({ port: info.port }, `Server is running`)
 })

@@ -149,3 +149,18 @@ dist
 package
 
 # End of https://www.toptal.com/developers/gitignore/api/node,svelte
+.turbo/cache/8d2a0a322ad90260-manifest.json
+.turbo/cache/8d2a0a322ad90260-meta.json
+.turbo/cache/8d2a0a322ad90260.tar.zst
+.turbo/cache/60f93ebea1cde024-manifest.json
+.turbo/cache/60f93ebea1cde024-meta.json
+.turbo/cache/60f93ebea1cde024.tar.zst
+.turbo/cache/55731f9f555bcb0c-manifest.json
+.turbo/cache/55731f9f555bcb0c-meta.json
+.turbo/cache/55731f9f555bcb0c.tar.zst
+.turbo/cache/d2989f35dae2daa8-manifest.json
+.turbo/cache/d2989f35dae2daa8-meta.json
+.turbo/cache/d2989f35dae2daa8.tar.zst
+.turbo/cache/f8045321af21054c-manifest.json
+.turbo/cache/f8045321af21054c-meta.json
+.turbo/cache/f8045321af21054c.tar.zst
