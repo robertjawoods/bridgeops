@@ -44,8 +44,10 @@ export const actions = {
                 body: {
                     email,
                     password
-                }
+                }, 
+                request: event.request,
             });
+
         } catch (error) {
             return fail(400, {
                 message: error instanceof Error ? error.message : 'Login failed',
@@ -89,6 +91,42 @@ export const actions = {
 
         return {
             message: 'Check your email for a magic link'
+        };
+    },
+    forgotPassword: async (event) => {
+        const { email } = await getLoginFormData(event);
+
+        const fieldErrors: Record<string, string> = {};
+
+        if (!email) {
+            fieldErrors.email = 'Email is required';
+        }
+
+        if (Object.keys(fieldErrors).length > 0) {
+            return fail(400, {
+                message: 'Please fix the highlighted fields',
+                fieldErrors
+            });
+        }
+
+        try {
+            await auth.api.requestPasswordReset({
+                body: {
+                    email,
+                    redirectTo: '/reset-password'
+                },
+                headers: event.request.headers
+            })
+        }
+        catch (error) {
+            return fail(400, {
+                message: error instanceof Error ? error.message : 'Could not send magic link',
+                fieldErrors: {}
+            });
+        }
+
+        return {
+            message: 'Check your email for a reset link'
         };
     }
 } satisfies Actions;

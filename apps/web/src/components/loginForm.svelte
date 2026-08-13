@@ -89,19 +89,32 @@
 			{/if}
 		</label>
 
-		<label class="flex flex-col gap-1">
-			<span class="text-sm font-medium text-[#c9d3ee]">Password</span>
+		<div class="flex flex-col gap-1">
+			<div class="flex items-center justify-between gap-3">
+				<label for="password" class="text-sm font-medium text-[#c9d3ee]">Password</label>
+				{#if action.includes('login')}
+					<button
+						type="submit"
+						formaction="?/forgotPassword"
+						formnovalidate
+						class="bg-transparent p-0 text-sm font-medium text-[#98a4f7] underline-offset-4 hover:underline"
+					>
+						Forgotten password?
+					</button>
+				{/if}
+			</div>
 			<input
+				id="password"
 				type="password"
 				name="password"
 				placeholder="Password"
 				required
-				class={`rounded-[10px] border bg-[#0f101a] px-4 py-3 text-white placeholder:text-[#646e87] focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none ${fieldErrors.password ? 'border-red-500' : 'border-[#1f2433]'}`}
+				class={`w-full rounded-[10px] border bg-[#0f101a] px-4 py-3 text-white placeholder:text-[#646e87] focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none ${fieldErrors.password ? 'border-red-500' : 'border-[#1f2433]'}`}
 			/>
 			{#if fieldErrors.password}
 				<span class="text-sm text-red-400">{fieldErrors.password}</span>
 			{/if}
-		</label>
+		</div>
 
 		<button
 			type="submit"
