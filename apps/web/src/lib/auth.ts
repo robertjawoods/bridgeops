@@ -11,6 +11,7 @@ import { ENV } from 'varlock/env';
 
 const resend = new Resend(ENV.RESEND_KEY);
 const normalizedOrigin = ENV.ORIGIN?.replace(/\/+$/, '');
+const email = ENV.EMAIL_ADDRESS
 
 export const auth = betterAuth({
 	baseURL: {
@@ -22,7 +23,17 @@ export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
 		provider: 'postgresql',
 	}),
-	emailAndPassword: { enabled: true },
+	emailAndPassword: {
+		enabled: true, 
+		sendResetPassword: async ({user, url}, request) => {
+			resend.emails.send({
+				from: email,
+				to: user.email, 
+				subject: 'BridgeOps - Reset Password',
+				html: `<p>Click <a href="${url}">here</a> to reset your password.</p>`
+			})
+		},
+	},
 	emailVerification: {
 		sendOnSignUp: true,
 		sendVerificationEmail: async ({ user, url, token }, request) => {
@@ -30,7 +41,7 @@ export const auth = betterAuth({
 
 			const send = async () => {
 				await resend.emails.send({
-					from: 'bridgeops@resend.dev',
+					from: email,
 					to: user.email,
 					subject: 'BridgeOps - Verify your email',
 					html: `<p>Click <a href="${url}">here</a> to verify your email.</p>`

@@ -66,6 +66,12 @@ export type CoercedEnvSchema = {
   GOOGLE_CLIENT_SECRET: string;
   
   /**
+   * **EMAIL_ADDRESS**  
+   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23808080%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%3E%3Cpath%20d%3D%22M17.5%2019.125A9%209%200%201%201%2021%2012c0%205.5-6%205.5-6%202V8%22%2F%3E%3Cpath%20d%3D%22M15%2012v-1.5C15%209.12%2013.657%208%2012%208s-3%201.12-3%202.5V12m6%200v1.5c0%201.38-1.343%202.5-3%202.5s-3-1.12-3-2.5V12%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E)   
+   */
+  EMAIL_ADDRESS: string;
+  
+  /**
    * **DATABASE_URL**  
    * Direct PostgreSQL connection string used by Prisma and the database package.  
    * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
@@ -74,11 +80,11 @@ export type CoercedEnvSchema = {
   
 };
 
-type _CoercedEnvSchema_baf18544 = CoercedEnvSchema;
+type _CoercedEnvSchema_d25a5d68 = CoercedEnvSchema;
 
 declare module 'varlock/env' {
-  export interface TypedEnvSchema extends Readonly<_CoercedEnvSchema_baf18544> {}
-  export interface PublicTypedEnvSchema extends Readonly<Pick<_CoercedEnvSchema_baf18544, 'ORIGIN' | 'GITHUB_CLIENT_ID' | 'INFISICAL_CLIENT_ID' | 'GOOGLE_CLIENT_ID' | 'DATABASE_URL'>> {}
+  export interface TypedEnvSchema extends Readonly<_CoercedEnvSchema_d25a5d68> {}
+  export interface PublicTypedEnvSchema extends Readonly<Pick<_CoercedEnvSchema_d25a5d68, 'ORIGIN' | 'GITHUB_CLIENT_ID' | 'INFISICAL_CLIENT_ID' | 'GOOGLE_CLIENT_ID' | 'EMAIL_ADDRESS' | 'DATABASE_URL'>> {}
 }
 
 
@@ -88,17 +94,17 @@ export type EnvSchemaAsStrings = {
       : (CoercedEnvSchema[Property] extends boolean ? ('true' | 'false') : string)
 };
 
-type _EnvSchemaAsStrings_baf18544 = EnvSchemaAsStrings;
+type _EnvSchemaAsStrings_d25a5d68 = EnvSchemaAsStrings;
 declare global {
 
   // add types for global import.meta.env
-  interface ImportMetaEnv extends _EnvSchemaAsStrings_baf18544 {}
+  interface ImportMetaEnv extends _EnvSchemaAsStrings_d25a5d68 {}
   interface ImportMeta {
     readonly env: ImportMetaEnv;
   }
 
   // add types for global process.env
   namespace NodeJS {
-    interface ProcessEnv extends _EnvSchemaAsStrings_baf18544 {}
+    interface ProcessEnv extends _EnvSchemaAsStrings_d25a5d68 {}
   }
 }
