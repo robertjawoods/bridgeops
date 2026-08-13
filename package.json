@@ -2,13 +2,13 @@
   "name": "bridgeops",
   "private": true,
   "scripts": {
-    "predev": "pnpm exec varlock load --agent",
-    "dev": "turbo dev",
+    "dev": "env -u DATABASE_URL pnpm exec varlock run -- env _VARLOCK_USE_INJECTED_ENV=1 turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
     "format": "turbo format",
-    "generate": "pnpm --filter @bridgeops/database generate"
+    "generate": "pnpm --filter @bridgeops/database generate",
+    "start": "turbo start"
   },
   "devDependencies": {
     "turbo": "^2",
