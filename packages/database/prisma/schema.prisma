@@ -119,6 +119,17 @@ model Verification {
   @@map("verification")
 }
 
+model Jwks {
+  id         String    @id
+  publicKey  String
+  privateKey String
+  createdAt  DateTime
+  expiresAt  DateTime?
+
+  @@map("jwks")
+}
+
+
 model Workspace {
   id        String   @id @default(cuid())
   name      String
