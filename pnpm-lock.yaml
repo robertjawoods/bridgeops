@@ -12,6 +12,9 @@ importers:
         specifier: ^1.16.1
         version: 1.16.1
     devDependencies:
+      '@varlock/infisical-plugin':
+        specifier: ^2.1.0
+        version: 2.1.0(varlock@1.16.1)
       turbo:
         specifier: ^2
         version: 2.10.8
@@ -45,10 +48,16 @@ importers:
       varlock:
         specifier: ^1.16.1
         version: 1.16.1
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@types/node':
         specifier: ^26.1.1
         version: 26.1.2
+      '@varlock/infisical-plugin':
+        specifier: ^2.1.0
+        version: 2.1.0(varlock@1.16.1)
       tsx:
         specifier: ^4.23.0
         version: 4.23.8
