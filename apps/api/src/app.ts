@@ -4,6 +4,7 @@ import { Hono } from "hono"
 import { requestId } from "hono/request-id"
 import pino from "pino"
 import { handle } from "./errors/handle"
+import v1 from "./v1"
 
 export type AppEnv = {
     Variables: {
@@ -51,6 +52,8 @@ export const createApp = ({ rootLogger }: { rootLogger?: pino.Logger }) => {
 
         return c.text('ready');
     })
+
+    app.route('api', v1);
 
     return app;
 }
