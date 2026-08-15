@@ -4,7 +4,7 @@ import { getRequestEvent } from '$app/server';
 import { prismaAdapter } from '@better-auth/prisma-adapter';
 import { prisma } from '@bridgeops/database';
 import { dash } from "@better-auth/infra";
-import { magicLink } from "better-auth/plugins";
+import { jwt, magicLink } from "better-auth/plugins";
 
 import { Resend } from 'resend';
 import { ENV } from 'varlock/env';
@@ -66,6 +66,7 @@ export const auth = betterAuth({
 		dash({
 			apiKey: ENV.BETTER_AUTH_API_KEY,
 		}),
+		jwt(),
 		magicLink({
 			sendMagicLink: async ({ email, url }) => {
 				const send = async () => {
