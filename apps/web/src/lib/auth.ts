@@ -14,6 +14,9 @@ const normalizedOrigin = ENV.ORIGIN?.replace(/\/+$/, '');
 const email = ENV.EMAIL_ADDRESS
 
 export const auth = betterAuth({
+	logger: {
+		level: 'debug'
+	},
 	baseURL: {
 		allowedHosts: ['localhost:5173', 'zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
 		fallback: normalizedOrigin,
