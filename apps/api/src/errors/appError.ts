@@ -1,4 +1,4 @@
-import { ErrorCode } from "./errorCodes";
+import type { ErrorCode } from "./errorCodes.js";
 
 export class AppError extends Error {
     constructor(

@@ -3,8 +3,9 @@ import { structuredLogger } from "@hono/structured-logger"
 import { Hono } from "hono"
 import { requestId } from "hono/request-id"
 import pino from "pino"
-import { handle } from "./errors/handle"
-import v1 from "./v1"
+import { handle } from "./errors/handle.js"
+import v1 from "./v1/index.js"
+import { requireAuth } from "./middleware/requireAuth.js"
 
 export type AppEnv = {
     Variables: {
@@ -18,7 +19,7 @@ export const createApp = ({ rootLogger }: { rootLogger?: pino.Logger }) => {
     const app = new Hono<AppEnv>()
 
     app.use(requestId())
-
+    //app.use('/api/*', requireAuth);
 
     if (rootLogger) {
         app.use('*', async (c, next) => {
@@ -53,7 +54,7 @@ export const createApp = ({ rootLogger }: { rootLogger?: pino.Logger }) => {
         return c.text('ready');
     })
 
-    app.route('api', v1);
+    const routes = app.route('/api', v1);
 
-    return app;
+    return {app, routes};
 }

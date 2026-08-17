@@ -2,10 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { Hono } from 'hono';
 import pino from 'pino';
 
-import { AppError } from './appError';
-import { handle } from './handle';
-import { ERROR_CODES } from './errorCodes';
-import type { AppEnv } from '../app';
+import { AppError } from './appError.js';
+import { handle } from './handle.js';
+import { ERROR_CODES } from './errorCodes.js';
+import type { AppEnv } from '../app.js';
 
 describe('handle', () => {
     it('returns the mapped status and error response for an AppError', async () => {
