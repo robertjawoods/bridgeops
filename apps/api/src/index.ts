@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
 import pino from 'pino';
-import { createApp } from './app';
+import { createApp } from './app.js';
 
 const rootLogger = pino({
   transport: {
@@ -8,7 +8,7 @@ const rootLogger = pino({
   }
 })
 
-const app = createApp({ rootLogger });
+const { app, routes } = createApp({ rootLogger });
 
 serve({
   fetch: app.fetch,
@@ -16,3 +16,5 @@ serve({
 }, (info) => {
   rootLogger.info({ port: info.port }, `Server is running`)
 })
+
+export type BridgeOpsAPI = typeof routes
