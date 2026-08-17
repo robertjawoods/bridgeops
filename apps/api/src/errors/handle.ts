@@ -1,6 +1,6 @@
 import type { ErrorHandler } from 'hono';
-import { AppError } from './appError';
-import { ERROR_STATUS } from './errorCodes';
+import { AppError } from './appError.js';
+import { ERROR_STATUS } from './errorCodes.js';
 
 
 export const handle: ErrorHandler = (error, c) => {
