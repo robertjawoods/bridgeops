@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "jsx": "react-jsx",
+
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true,
+  },
+  "exclude": ["node_modules"],
+  "include": ["env.d.ts", "src/**/*.ts"]
+}
