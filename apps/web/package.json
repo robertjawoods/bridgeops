@@ -47,6 +47,7 @@
 		"vite": "^8.0.16"
 	},
 	"dependencies": {
+		"@bridgeops/api": "workspace:*",
 		"@better-auth/infra": "^0.3.7",
 		"@better-auth/prisma-adapter": "^1.6.26",
 		"@bridgeops/database": "workspace:*",

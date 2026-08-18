@@ -1,25 +1,25 @@
 import { getRequestEvent, query } from '$app/server';
 import { z } from 'zod';
-import type { BridgeOpsAPI } from '../../../../../api/src';
-import { hc } from 'hono/client'
 
 import { auth } from '$lib/auth';
-
-const apiClient = hc<BridgeOpsAPI>("http://localhost:3000")
+import { createApiClient } from '$lib/apiClient';
 
 export const getWorkspaces = query(async () => {
 
     const req = getRequestEvent();
 
-    const token = await auth.api.getToken({
+    const {token} = await auth.api.getToken({
         headers: req.request.headers
     });
 
+    if (!token) {
+        throw new Error('Missing authentication token');
+    }
+
     console.log('remote function')
 
-    const response = await apiClient.api.v1.workspaces.$get({
-        token
-    });
+    const apiClient = createApiClient(token);
+    const response = await apiClient.api.v1.workspaces.$get();
 
     console.log(response)
 

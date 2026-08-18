@@ -19,7 +19,7 @@ export const createApp = ({ rootLogger }: { rootLogger?: pino.Logger }) => {
     const app = new Hono<AppEnv>()
 
     app.use(requestId())
-    //app.use('/api/*', requireAuth);
+    app.use('/api/*', requireAuth);
 
     if (rootLogger) {
         app.use('*', async (c, next) => {
