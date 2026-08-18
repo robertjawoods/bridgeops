@@ -9,7 +9,11 @@ const JWKS = createRemoteJWKSet(
 )
 
 export const requireAuth = createMiddleware(async (c, next) => {
+	console.log(c.req.raw)
+
 	const authorization = c.req.header('Authorization')
+
+	console.log('Authorization header:', authorization)
 
 	if (!authorization?.startsWith('Bearer ')) {
 		throw new AppError(ERROR_CODES.UNAUTHENTICATED, 'Missing or invalid Authorization header')
