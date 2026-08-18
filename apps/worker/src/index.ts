@@ -1,7 +1,10 @@
 import "varlock/auto-load";
 
 import { ENV } from 'varlock/env';
+import { Redis } from 'ioredis';
 import pino from 'pino';
+
+import { Worker } from 'bullmq';
 
 const logger = pino({
   transport: {
@@ -11,16 +14,44 @@ const logger = pino({
 });
 
 async function startWorker() {
-  const queueUrl = ENV.QUEUE_URL;
+  logger.info("Worker starting");
 
-  logger.info({ queueUrl }, "Worker starting");
+  const redis = new Redis(ENV.QUEUE_URL, {
+    maxRetriesPerRequest: null,
+  });
+  const redisStatus = await redis.ping();
+
+  logger.info({ redisStatus }, "Redis connection established");
 
   // Initialize queue client and begin processing jobs here.
   // Return an object with a graceful stop method.
+
+  const worker = new Worker(
+    ENV.QUEUE_NAME,
+    async (job) => {
+      logger.info({ jobId: job.id, jobName: job.name }, "Processing job");
+      // Job processing logic here
+    },
+    { connection: redis }
+  );
+
+  worker.on('completed', (job) => {
+    logger.info({ jobId: job.id, jobName: job.name }, "Job completed");
+  });
+
+  worker.on('failed', (job, err) => {
+    logger.error(
+      { jobId: job?.id, jobName: job?.name, error: err.message },
+      "Job failed"
+    );
+  });
+
   return {
     async stop() {
       logger.info("Worker stopping");
       // Stop accepting new jobs and wait for active jobs to finish.
+      await worker.close();
+      await redis.quit();
     },
   };
 }
