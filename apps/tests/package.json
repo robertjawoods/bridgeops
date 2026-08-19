@@ -1,0 +1,18 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "integration": "QUEUE_URL=redis://localhost:6379 QUEUE_NAME=bridgeops-integration APP_URL=http://localhost:3000 DATABASE_URL=postgresql://localhost:5432/bridgeops vitest --root ../.. --project integration",
+    "e2e": "not implemented"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "pino": "^10.3.1",
+    "vitest": "^4.1.10"
+  }
+}

@@ -4,10 +4,6 @@ import { ENV } from 'varlock/env';
 import { AppError } from '../errors/appError.js';
 import { ERROR_CODES } from '../errors/errorCodes.js';
 
-const JWKS = createRemoteJWKSet(
-	new URL(`${ENV.APP_URL}/api/auth/jwks`)
-)
-
 export const requireAuth = createMiddleware(async (c, next) => {
 	const authorization = c.req.header('Authorization')
 
@@ -18,7 +14,10 @@ export const requireAuth = createMiddleware(async (c, next) => {
 	const token = authorization.slice('Bearer '.length)
 
 	try {
-		const { payload } = await jwtVerify(token, JWKS, {
+		const jwks = createRemoteJWKSet(
+			new URL(`${ENV.APP_URL}/api/auth/jwks`)
+		)
+		const { payload } = await jwtVerify(token, jwks, {
 			issuer: `${ENV.APP_URL}`,
 			audience: `${ENV.APP_URL}`
 		})

@@ -3,13 +3,15 @@ import { Queue } from "bullmq";
 import { ENV } from "varlock/env";
 import { AppError } from "../../errors/appError.js";
 
-const queue = new Queue(ENV.QUEUE_NAME, {
+export type JobQueue = Pick<Queue, "add">;
+
+export const createQueue = (): JobQueue => new Queue(ENV.QUEUE_NAME, {
     connection: {
         url: ENV.QUEUE_URL,
     },
 });
-        
-const jobs = new Hono()
+
+export const createJobs = ({ queue }: { queue: JobQueue }) => new Hono()
     .post("/", async (c) => {
         let body: {
             name?: string;
@@ -33,5 +35,3 @@ const jobs = new Hono()
             name: job.name,
         }, 202);
     })
-
-export default jobs;

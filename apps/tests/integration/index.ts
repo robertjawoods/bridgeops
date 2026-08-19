@@ -1,6 +1,7 @@
 import pino from 'pino'
 import { describe, expect, it, vi } from 'vitest'
 import { createApp } from '../../api/src/app.js'
+import { createJobs, type JobQueue } from '../../api/src/v1/jobs/index.js'
 
 const createTestApp = () =>
 	createApp({
@@ -33,18 +34,18 @@ describe('API integration', () => {
 		})
 	})
 
-	// it('publishes a job through the injected queue', async () => {
-	// 	const queue = {
-	// 		add: vi.fn().mockResolvedValue({ id: 'job-1', name: 'deploy' }),
-	// 	} as unknown as JobQueue
-	// 	const response = await createJobs({ queue }).request('/', {
-	// 		method: 'POST',
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 		body: JSON.stringify({ name: 'deploy', data: { service: 'api' } }),
-	// 	})
+	it('publishes a job through the injected queue', async () => {
+		const queue = {
+			add: vi.fn().mockResolvedValue({ id: 'job-1', name: 'deploy' }),
+		} as unknown as JobQueue
+		const response = await createJobs({ queue }).request('/', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ name: 'deploy', data: { service: 'api' } }),
+		})
 
-	// 	expect(response.status).toBe(202)
-	// 	expect(await response.json()).toEqual({ id: 'job-1', name: 'deploy' })
-	// 	expect(queue.add).toHaveBeenCalledWith('deploy', { service: 'api' })
-	// })
+		expect(response.status).toBe(202)
+		expect(await response.json()).toEqual({ id: 'job-1', name: 'deploy' })
+		expect(queue.add).toHaveBeenCalledWith('deploy', { service: 'api' })
+	})
 })
