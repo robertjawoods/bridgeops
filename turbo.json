@@ -28,7 +28,11 @@
         "^build"
       ],
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "passThroughEnv": [
+        "QUEUE_NAME",
+        "QUEUE_URL"
+      ]
     }
   }
 }
