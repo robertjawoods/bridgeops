@@ -2,7 +2,6 @@ import { prisma } from "@bridgeops/database"
 import { Hono } from "hono"
 import pino from "pino"
 import { handle } from "./errors/handle.js"
-import v1 from "./v1/index.js"
 
 import { setupMiddleware } from "./middleware/index.js"
 export type AppEnv = {
@@ -13,7 +12,13 @@ export type AppEnv = {
 };
 
 
-export const createApp = ({ rootLogger }: { rootLogger: pino.Logger }) => {
+export const createApp = ({
+    rootLogger,
+    api = new Hono(),
+}: {
+    rootLogger: pino.Logger;
+    api?: Hono;
+}) => {
     const app = new Hono<AppEnv>()
 
     setupMiddleware(app, rootLogger)
@@ -34,7 +39,7 @@ export const createApp = ({ rootLogger }: { rootLogger: pino.Logger }) => {
         return c.text('ready');
     })
 
-    const routes = app.route('/api', v1);
+    const routes = app.route('/api', api);
 
     return { app, routes };
 }
