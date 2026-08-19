@@ -18,7 +18,7 @@ export const auth = betterAuth({
 		level: 'debug'
 	},
 	baseURL: {
-		allowedHosts: ['localhost:5173', 'zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
+		allowedHosts: ['localhost:5173', 'zeke-monohydroxy-unscrupulously.ngrok-free.dev', 'web-development-3213.up.railway.app'],
 		fallback: normalizedOrigin,
 		protocol: 'auto'
 	},
