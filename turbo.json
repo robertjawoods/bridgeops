@@ -17,7 +17,9 @@
       ],
       "passThroughEnv": [
         "INFISICAL_CLIENT_ID",
-        "INFISICAL_CLIENT_SECRET"
+        "INFISICAL_CLIENT_SECRET",
+        "API_URL",
+        "EMAIL_ADDRESS"
       ]
     },
     "dev": {
