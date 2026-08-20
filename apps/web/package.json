@@ -49,6 +49,7 @@
 		"vite-plugin-biome": "^1.2.0"
 	},
 	"dependencies": {
+		"@bridgeops/api": "workspace:*",
 		"@better-auth/infra": "^0.3.7",
 		"@better-auth/prisma-adapter": "^1.6.26",
 		"@bridgeops/api": "workspace:*",
