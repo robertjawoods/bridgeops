@@ -1,7 +1,4 @@
 <script lang="ts">
-
-	import { getWorkspaces } from './data.remote';
-
 </script>
 
 <h2>Dashboard</h2>

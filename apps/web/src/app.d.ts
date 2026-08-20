@@ -1,5 +1,5 @@
-import type { User, Session } from 'better-auth';
-import { authClient } from '$lib/auth';
+import type { Session, User } from "better-auth";
+import { authClient } from "$lib/auth";
 
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
@@ -17,5 +17,3 @@ declare global {
 		// interface Platform {}
 	}
 }
-
-export {};

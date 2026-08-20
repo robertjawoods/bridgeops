@@ -1,8 +1,6 @@
+import { jwtClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/svelte"; // make sure to import from better-auth/svelte
-import { jwtClient } from 'better-auth/client/plugins';
 
 export const authClient = createAuthClient({
-  plugins: [
-    jwtClient()
-  ]
+	plugins: [jwtClient()],
 });

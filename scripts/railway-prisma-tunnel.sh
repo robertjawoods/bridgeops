@@ -42,4 +42,4 @@ while IFS= read -r line; do
     updated=1
     echo "Prisma DATABASE_URL updated: $url"
   fi
-done < <(railway connect Postgres --tunnel-only 2>&1)
+done < <(railway connect database --tunnel-only 2>&1)

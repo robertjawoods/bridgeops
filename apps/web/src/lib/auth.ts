@@ -1,70 +1,76 @@
-import { betterAuth } from 'better-auth/minimal';
-import { sveltekitCookies } from 'better-auth/svelte-kit';
-import { getRequestEvent } from '$app/server';
-import { prismaAdapter } from '@better-auth/prisma-adapter';
-import { prisma } from '@bridgeops/database';
 import { dash } from "@better-auth/infra";
+import { prismaAdapter } from "@better-auth/prisma-adapter";
+import { prisma } from "@bridgeops/database";
+import { betterAuth } from "better-auth/minimal";
 import { jwt, magicLink } from "better-auth/plugins";
-
-import { Resend } from 'resend';
-import { ENV } from 'varlock/env';
+import { sveltekitCookies } from "better-auth/svelte-kit";
+import { Resend } from "resend";
+import { ENV } from "varlock/env";
+import { getRequestEvent } from "$app/server";
 
 const resend = new Resend(ENV.RESEND_KEY);
-const normalizedOrigin = ENV.ORIGIN?.replace(/\/+$/, '');
-const email = ENV.EMAIL_ADDRESS
+const normalizedOrigin = ENV.ORIGIN?.replace(/\/+$/, "");
+const email = ENV.EMAIL_ADDRESS;
 
 export const auth = betterAuth({
 	logger: {
-		level: 'debug'
+		level: "debug",
 	},
 	baseURL: {
-		allowedHosts: ['localhost:5173', 'zeke-monohydroxy-unscrupulously.ngrok-free.dev', 'web-development-3213.up.railway.app'],
+		allowedHosts: [
+			"localhost:5173",
+			"zeke-monohydroxy-unscrupulously.ngrok-free.dev",
+			"web-development-3213.up.railway.app",
+		],
 		fallback: normalizedOrigin,
-		protocol: 'auto'
+		protocol: "auto",
 	},
 	secret: ENV.BETTER_AUTH_SECRET,
 	database: prismaAdapter(prisma, {
-		provider: 'postgresql',
+		provider: "postgresql",
 	}),
 	emailAndPassword: {
-		enabled: true, 
-		sendResetPassword: async ({user, url}, request) => {
+		enabled: true,
+		sendResetPassword: async ({ user, url }, _request) => {
 			resend.emails.send({
 				from: email,
-				to: user.email, 
-				subject: 'BridgeOps - Reset Password',
-				html: `<p>Click <a href="${url}">here</a> to reset your password.</p>`
-			})
+				to: user.email,
+				subject: "BridgeOps - Reset Password",
+				html: `<p>Click <a href="${url}">here</a> to reset your password.</p>`,
+			});
 		},
 	},
 	emailVerification: {
 		sendOnSignUp: true,
-		sendVerificationEmail: async ({ user, url, token }, request) => {
-			console.log('Sending verification email to:', user.email);
+		sendVerificationEmail: async ({ user, url }, _request) => {
+			console.log("Sending verification email to:", user.email);
 
 			const send = async () => {
 				await resend.emails.send({
 					from: email,
 					to: user.email,
-					subject: 'BridgeOps - Verify your email',
-					html: `<p>Click <a href="${url}">here</a> to verify your email.</p>`
+					subject: "BridgeOps - Verify your email",
+					html: `<p>Click <a href="${url}">here</a> to verify your email.</p>`,
 				});
-			}
+			};
 
 			send();
-		}
+		},
 	},
 	socialProviders: {
 		github: {
-			clientId: ENV.GITHUB_CLIENT_ID ?? '',
-			clientSecret: ENV.GITHUB_CLIENT_SECRET ?? '',
+			clientId: ENV.GITHUB_CLIENT_ID ?? "",
+			clientSecret: ENV.GITHUB_CLIENT_SECRET ?? "",
 		},
 		google: {
-			clientId: ENV.GOOGLE_CLIENT_ID ?? '',
-			clientSecret: ENV.GOOGLE_CLIENT_SECRET ?? ''
+			clientId: ENV.GOOGLE_CLIENT_ID ?? "",
+			clientSecret: ENV.GOOGLE_CLIENT_SECRET ?? "",
 		},
 	},
-	trustedOrigins: ['http://localhost:5173', 'https://zeke-monohydroxy-unscrupulously.ngrok-free.dev'],
+	trustedOrigins: [
+		"http://localhost:5173",
+		"https://zeke-monohydroxy-unscrupulously.ngrok-free.dev",
+	],
 	plugins: [
 		dash({
 			apiKey: ENV.BETTER_AUTH_API_KEY,
@@ -74,16 +80,16 @@ export const auth = betterAuth({
 			sendMagicLink: async ({ email, url }) => {
 				const send = async () => {
 					await resend.emails.send({
-						from: 'bridgeops@resend.dev',
+						from: "bridgeops@resend.dev",
 						to: email,
-						subject: 'BridgeOps - Magic Link',
-						html: `<p>Click <a href="${url}">here</a> to sign in</p>`
+						subject: "BridgeOps - Magic Link",
+						html: `<p>Click <a href="${url}">here</a> to sign in</p>`,
 					});
-				}
+				};
 
 				send();
-			}
+			},
 		}),
-		sveltekitCookies(getRequestEvent) // make sure this is the last plugin in the array
-	]
+		sveltekitCookies(getRequestEvent), // make sure this is the last plugin in the array
+	],
 });

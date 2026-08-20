@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { ActionData } from './$types';
+import { page } from "$app/state";
+import type { ActionData } from "./$types";
 
-	import { page } from '$app/state';
+const _token = page.url.searchParams.get("token");
 
-	const token = page.url.searchParams.get('token');
-
-	let { form }: { form: ActionData | null } = $props();
+let { form }: { form: ActionData | null } = $props();
 </script>
 
 <section class="mx-auto max-w-4xl px-4 py-10 sm:py-14">

@@ -11,7 +11,7 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check . && eslint .",
+		"lint": "biome lint src",
 		"format": "prettier --write .",
 		"db:push": "pnpm --filter @bridgeops/database exec prisma db push",
 		"db:generate": "pnpm --filter @bridgeops/database run generate",
@@ -19,6 +19,7 @@
 		"db:studio": "pnpm --filter @bridgeops/database run studio"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.5.9",
 		"@eslint/js": "^10.0.1",
 		"@libsql/client": "^0.17.3",
 		"@sveltejs/adapter-auto": "^7.0.1",
@@ -44,12 +45,13 @@
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.60.1",
 		"varlock": "^1.16.1",
-		"vite": "^8.0.16"
+		"vite": "^8.0.16",
+		"vite-plugin-biome": "^1.2.0"
 	},
 	"dependencies": {
-		"@bridgeops/api": "workspace:*",
 		"@better-auth/infra": "^0.3.7",
 		"@better-auth/prisma-adapter": "^1.6.26",
+		"@bridgeops/api": "workspace:*",
 		"@bridgeops/database": "workspace:*",
 		"@fontsource/inter": "^5.3.0",
 		"@fontsource/inter-tight": "^5.3.0",
