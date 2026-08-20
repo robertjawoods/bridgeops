@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
 import { getRequestEvent, query } from "$app/server";
-import { createApiClient } from "$lib/apiClient";
+import { createApiClient } from "$lib/api/apiClient";
 
 import { auth } from "$lib/auth";
 
