@@ -34,10 +34,19 @@ describe('API integration', () => {
 		})
 	})
 
+	it('reports the service as ready when the database is reachable', async () => {
+		const response = await createTestApp().request('/ready')
+
+		expect(response.status).toBe(200)
+		expect(await response.text()).toBe('ready')
+	})
+
 	it('publishes a job through the injected queue', async () => {
 		const queue = {
 			add: vi.fn().mockResolvedValue({ id: 'job-1', name: 'deploy' }),
 		} as unknown as JobQueue
+
+
 		const response = await createJobs({ queue }).request('/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
