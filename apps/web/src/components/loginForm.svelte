@@ -1,8 +1,6 @@
 <script lang="ts">
-import { createAuthClient } from "better-auth/client";
 import { enhance } from "$app/forms";
-
-const authClient = createAuthClient();
+import { authClient } from "$lib/auth/index";
 
 type FieldErrors = Partial<Record<"name" | "email" | "password", string>>;
 type LoginFormData = {

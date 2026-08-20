@@ -1,4 +1,5 @@
 <script lang="ts">
+import { enhance } from "$app/forms";
 import { page } from "$app/state";
 import type { ActionData } from "./$types";
 
@@ -17,7 +18,7 @@ let { form }: { form: ActionData | null } = $props();
 			use:enhance
 			class="flex flex-col gap-5 rounded-[16px] border border-[#1f2433] bg-[#151621] p-5"
 		>
-			<input type="hidden" value={token} name="token"/>
+			<input type="hidden" value={_token} name="token"/>
 			<label class="flex flex-col gap-1" for="password">
 				<span class="text-sm font-medium text-[#c9d3ee]">Password</span>
 				<input

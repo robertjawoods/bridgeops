@@ -1,5 +1,6 @@
 <script lang="ts">
 import "./layout.css";
+
 import Navbar from "../components/navbar.svelte";
 
 let { children, data } = $props();

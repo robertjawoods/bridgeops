@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { Session, User } from "better-auth";
+
 import { invalidateAll } from "$app/navigation";
 
 let {
