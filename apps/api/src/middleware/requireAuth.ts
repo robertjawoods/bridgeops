@@ -18,7 +18,7 @@ export const requireAuth = createMiddleware(async (c, next) => {
 
 	try {
 		const jwks = createRemoteJWKSet(
-			new URL(`${ENV.APP_URL}/api/auth/jwks`)
+			new URL(`${ENV.APP_INTERNAL_URL}/api/auth/jwks`)
 		)
 
 		const { payload } = await jwtVerify(token, jwks, {
@@ -30,7 +30,14 @@ export const requireAuth = createMiddleware(async (c, next) => {
 
 		await next()
 	} catch (error) {
-		logger?.error({ error }, 'Failed to verify JWT')
+		logger?.error({
+			errorName: error instanceof Error ? error.name : undefined,
+			errorMessage: error instanceof Error ? error.message : String(error),
+			errorCode:
+				typeof error === "object" && error !== null && "code" in error
+					? error.code
+					: undefined,
+		}, 'Failed to verify JWT')
 
 		throw new AppError(ERROR_CODES.UNAUTHENTICATED, 'Unauthorized')
 	}
