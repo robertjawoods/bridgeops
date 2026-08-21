@@ -6,6 +6,7 @@ import { ERROR_CODES } from '../errors/errorCodes.js';
 
 export const requireAuth = createMiddleware(async (c, next) => {
 	const authorization = c.req.header('Authorization')
+	const logger = c.get('logger')
 
 	if (!authorization?.startsWith('Bearer ')) {
 		throw new AppError(ERROR_CODES.UNAUTHENTICATED, 'Missing or invalid Authorization header')
@@ -13,10 +14,13 @@ export const requireAuth = createMiddleware(async (c, next) => {
 
 	const token = authorization.slice('Bearer '.length)
 
+	logger?.info({ AppUrl: ENV.APP_URL }, 'Verifying JWT')
+
 	try {
 		const jwks = createRemoteJWKSet(
 			new URL(`${ENV.APP_URL}/api/auth/jwks`)
 		)
+
 		const { payload } = await jwtVerify(token, jwks, {
 			issuer: `${ENV.APP_URL}`,
 			audience: `${ENV.APP_URL}`
@@ -25,7 +29,9 @@ export const requireAuth = createMiddleware(async (c, next) => {
 		c.set('userId', payload.sub)
 
 		await next()
-	} catch {
+	} catch (error) {
+		logger?.error({ error }, 'Failed to verify JWT')
+
 		throw new AppError(ERROR_CODES.UNAUTHENTICATED, 'Unauthorized')
 	}
 })

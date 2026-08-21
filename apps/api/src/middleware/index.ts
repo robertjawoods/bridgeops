@@ -9,8 +9,6 @@ import { workspaceAuthorisation } from "./workspaceAuthorisation.js";
 export const setupMiddleware = (app: Hono<AppEnv>, rootLogger: pino.Logger) => {
     app
         .use(requestId())
-        .use('/api/*', requireAuth)
-        .use('/api/v1/workspaces/:slug/*', workspaceAuthorisation)
         .use('*', async (c, next) => {
             c.set(
                 'logger',
@@ -20,8 +18,11 @@ export const setupMiddleware = (app: Hono<AppEnv>, rootLogger: pino.Logger) => {
             )
 
             await next()
-    })
-    .use(structuredLogger({
-        createLogger: (c) => c.get('logger')
-    }))
+        })
+        .use('/api/*', requireAuth)
+        .use('/api/v1/workspaces/:slug/*', workspaceAuthorisation)
+
+        .use(structuredLogger({
+            createLogger: (c) => c.get('logger')
+        }))
 }
