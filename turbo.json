@@ -14,6 +14,12 @@
       "outputs": [
         "dist/**",
         ".svelte-kit/**"
+      ],
+      "passThroughEnv": [
+        "INFISICAL_CLIENT_ID",
+        "INFISICAL_CLIENT_SECRET",
+        "API_URL",
+        "EMAIL_ADDRESS"
       ]
     },
     "dev": {
@@ -28,7 +34,11 @@
         "^build"
       ],
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "passThroughEnv": [
+        "QUEUE_NAME",
+        "QUEUE_URL"
+      ]
     }
   }
 }

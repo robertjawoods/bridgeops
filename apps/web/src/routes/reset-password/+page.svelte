@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { ActionData } from './$types';
+import { enhance } from "$app/forms";
+import { page } from "$app/state";
+import type { ActionData } from "./$types";
 
-	import { page } from '$app/state';
+const _token = page.url.searchParams.get("token");
 
-	const token = page.url.searchParams.get('token');
-
-	let { form }: { form: ActionData | null } = $props();
+let { form }: { form: ActionData | null } = $props();
 </script>
 
 <section class="mx-auto max-w-4xl px-4 py-10 sm:py-14">
@@ -19,7 +18,7 @@
 			use:enhance
 			class="flex flex-col gap-5 rounded-[16px] border border-[#1f2433] bg-[#151621] p-5"
 		>
-			<input type="hidden" value={token} name="token"/>
+			<input type="hidden" value={_token} name="token"/>
 			<label class="flex flex-col gap-1" for="password">
 				<span class="text-sm font-medium text-[#c9d3ee]">Password</span>
 				<input

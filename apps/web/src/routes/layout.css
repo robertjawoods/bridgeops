@@ -1,9 +1,9 @@
-@import 'tailwindcss';
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/700.css';
-@import '@fontsource/inter-tight/500.css';
-@import '@fontsource/inter-tight/700.css';
+@import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/inter-tight/500.css";
+@import "@fontsource/inter-tight/700.css";
 
 :root {
 	/* Colors */
@@ -16,13 +16,20 @@
 	--color-pure-white: #ffffff;
 	--color-deep-ink: #000000;
 	--color-iris-blue: #5b63d3;
-	--gradient-iris-blue: linear-gradient(353deg, rgb(91, 99, 211) 17.51%, rgb(124, 135, 247) 183.08%);
+	--gradient-iris-blue: linear-gradient(
+		353deg,
+		rgb(91, 99, 211) 17.51%,
+		rgb(124, 135, 247) 183.08%
+	);
 	--color-periwinkle-glow: #98a4f7;
 
 	/* Typography */
-	--font-helvetica-now-text: 'Inter', ui-sans-serif, system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+	--font-helvetica-now-text:
+		"Inter", ui-sans-serif, system-ui, -apple-system, blinkmacsystemfont,
+		"Segoe UI", sans-serif;
 	--font-helvetica-now-display:
-		'Inter Tight', ui-sans-serif, system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+		"Inter Tight", ui-sans-serif, system-ui, -apple-system, blinkmacsystemfont,
+		"Segoe UI", sans-serif;
 
 	/* Shadows */
 	--shadow-subtle: rgba(255, 255, 255, 0.25) 0 1px 3px 0 inset;
@@ -53,8 +60,16 @@
 	body {
 		font-family: var(--font-helvetica-now-text);
 		background:
-			radial-gradient(90% 60% at 10% -10%, rgb(91 99 211 / 18%), transparent 60%),
-			radial-gradient(60% 40% at 100% 0%, rgb(152 164 247 / 10%), transparent 70%),
+			radial-gradient(
+				90% 60% at 10% -10%,
+				rgb(91 99 211 / 18%),
+				transparent 60%
+			),
+			radial-gradient(
+				60% 40% at 100% 0%,
+				rgb(152 164 247 / 10%),
+				transparent 70%
+			),
 			var(--color-void-black);
 		color: var(--color-frost);
 		min-height: 100vh;

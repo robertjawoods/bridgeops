@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect } from "@sveltejs/kit";
 
 export const load = async ({ locals, url }) => {
 	const redirectTo = `${url.pathname}${url.search}`;
@@ -8,6 +8,6 @@ export const load = async ({ locals, url }) => {
 	}
 
 	return {
-		session: locals.session
+		session: locals.session,
 	};
 };

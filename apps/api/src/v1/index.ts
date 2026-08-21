@@ -1,10 +1,8 @@
 import { Hono } from "hono";
 
 import workspaces from "./workspaces/index.js";
-import jobs from "./jobs/index.js";
+import { createJobs, createQueue, type JobQueue } from "./jobs/index.js";
 
-const v1 = new Hono().basePath("/v1")
+export const createV1 = ({ queue = createQueue() }: { queue?: JobQueue } = {}) => new Hono().basePath("/v1")
     .route("/workspaces", workspaces)
-    .route("/jobs", jobs);
-
-export default v1;
+    .route("/jobs", createJobs({ queue }));

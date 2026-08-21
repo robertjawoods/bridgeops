@@ -1,6 +1,9 @@
+import "varlock/auto-load";
+import { ENV } from 'varlock/env';
 import { serve } from '@hono/node-server'
 import pino from 'pino';
 import { createApp } from './app.js';
+import { createV1 } from './v1/index.js';
 
 const rootLogger = pino({
   transport: {
@@ -8,11 +11,11 @@ const rootLogger = pino({
   }
 })
 
-const { app, routes } = createApp({ rootLogger });
+const { app, routes } = createApp({ rootLogger, api: createV1() });
 
 serve({
   fetch: app.fetch,
-  port: 3000
+  port: ENV.PORT
 }, (info) => {
   rootLogger.info({ port: info.port }, `Server is running`)
 })

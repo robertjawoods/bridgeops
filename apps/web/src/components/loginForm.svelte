@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { createAuthClient } from 'better-auth/client';
-	const authClient = createAuthClient();
+	import { authClient } from '$lib/auth/client/authClient';
 
 	type FieldErrors = Partial<Record<'name' | 'email' | 'password', string>>;
 	type LoginFormData = {
@@ -32,16 +31,16 @@
 	} = $props();
 
 	const fieldErrors = $derived((form?.fieldErrors ?? {}) as FieldErrors);
-	const hasFieldErrors = $derived(Object.keys(fieldErrors).length > 0);
+	const _hasFieldErrors = $derived(Object.keys(fieldErrors).length > 0);
 
-	const handleGitHubClick = async () => {
+	const _handleGitHubClick = async () => {
 		await authClient.signIn.social({
 			provider: 'github',
 			callbackURL: redirectTo
 		});
 	};
 
-	const handleGoogleClick = async () => {
+	const _handleGoogleClick = async () => {
 		await authClient.signIn.social({
 			provider: 'google',
 			callbackURL: redirectTo
@@ -142,7 +141,7 @@
 
 		<button
 			type="button"
-			onclick={handleGitHubClick}
+			onclick={_handleGitHubClick}
 			class="flex items-center justify-center gap-3 rounded-[10px] border border-[#1f2433] bg-[#0f101a] px-4 py-3 font-medium text-[#c9d3ee] transition hover:border-[#939db8] hover:text-white focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none"
 		>
 			<svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5 fill-current">
@@ -155,7 +154,7 @@
 
 		<button
 			type="button"
-			onclick={handleGoogleClick}
+			onclick={_handleGoogleClick}
 			class="flex items-center justify-center gap-3 rounded-[10px] border border-[#1f2433] bg-[#0f101a] px-4 py-3 font-medium text-[#c9d3ee] transition hover:border-[#939db8] hover:text-white focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none"
 		>
 			<svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5">
@@ -188,7 +187,7 @@
 	</p>
 
 	{#if form?.message}
-		<p class={`min-h-6 text-center text-sm ${hasFieldErrors ? 'text-red-400' : 'text-[#c9d3ee]'}`}>
+		<p class={`min-h-6 text-center text-sm ${_hasFieldErrors ? 'text-red-400' : 'text-[#c9d3ee]'}`}>
 			{form.message}
 		</p>
 	{/if}

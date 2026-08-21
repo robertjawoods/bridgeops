@@ -1,22 +1,27 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
-	import type { Session, User } from 'better-auth';
+import type { Session, User } from "better-auth";
 
-	let { session = null, user = null }: { session?: Session | null; user?: User | null } = $props();
+import { invalidateAll } from "$app/navigation";
 
-	import { createAuthClient } from 'better-auth/client';
-	const authClient = createAuthClient();
+let {
+	session = null,
+	user = null,
+}: { session?: Session | null; user?: User | null } = $props();
 
-	const handleSignOut = async () => {
-		// Implement sign-out logic here
-		var { data } = await authClient.signOut();
+import { createAuthClient } from "better-auth/client";
 
-		if (data?.success) {
-			await invalidateAll();
-		}
+const authClient = createAuthClient();
 
-		console.log('Sign out clicked');
-	};
+const _handleSignOut = async () => {
+	// Implement sign-out logic here
+	var { data } = await authClient.signOut();
+
+	if (data?.success) {
+		await invalidateAll();
+	}
+
+	console.log("Sign out clicked");
+};
 </script>
 
 <nav
@@ -38,7 +43,7 @@
 				<button
 					type="button"
 					class="rounded-[9999px] border border-[#939db8] px-5 py-2 text-sm font-medium text-[#c9d3ee] transition hover:border-[#c9d3ee] hover:text-white"
-					onclick={handleSignOut}
+					onclick={_handleSignOut}
 				>
 					Sign out
 				</button>

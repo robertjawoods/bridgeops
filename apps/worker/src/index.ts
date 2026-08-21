@@ -1,5 +1,3 @@
-import "varlock/auto-load";
-
 import { ENV } from 'varlock/env';
 import { Redis } from 'ioredis';
 import pino from 'pino';
