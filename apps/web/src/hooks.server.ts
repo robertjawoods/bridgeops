@@ -1,5 +1,5 @@
 import "varlock/auto-load";
-import type { Handle } from "@sveltejs/kit";
+import type { Handle, HandleServerError } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from "$app/environment";
@@ -74,3 +74,20 @@ export const handle: Handle = sequence(
 	handleRequestLogging, 
 	handleBetterAuth
 );
+
+export const handleError: HandleServerError = ({ error, event, status, message }) => {
+	logger.error(
+		{
+			err: error,
+			status,
+			method: event.request.method,
+			path: event.url.pathname,
+			message,
+		},
+		"Unhandled SvelteKit error",
+	);
+
+	return {
+		message: "Internal Error",
+	};
+};
