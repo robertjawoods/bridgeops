@@ -1,8 +1,10 @@
 import "varlock/auto-load";
 import type { Handle } from "@sveltejs/kit";
+import { sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from "$app/environment";
 import { auth } from "$lib/auth";
+import { logger } from "$lib/logger";
 
 const handleBetterAuth: Handle = async ({ event, resolve }) => {
 	let session: Awaited<ReturnType<typeof auth.api.getSession>> | null = null;
@@ -36,4 +38,39 @@ const handleBetterAuth: Handle = async ({ event, resolve }) => {
 	return svelteKitHandler({ event, resolve, auth, building });
 };
 
-export const handle: Handle = handleBetterAuth;
+const handleRequestLogging: Handle = async ({ event, resolve }) => {
+	const start = performance.now();
+
+	try {
+		const response = await resolve(event);
+
+		logger.info(
+			{
+				method: event.request.method,
+				path: event.url.pathname,
+				status: response.status,
+				durationMs: Math.round(performance.now() - start),
+			},
+			"HTTP request",
+		);
+
+		return response;
+	} catch (error) {
+		logger.error(
+			{
+				err: error,
+				method: event.request.method,
+				path: event.url.pathname,
+				durationMs: Math.round(performance.now() - start),
+			},
+			"HTTP request failed",
+		);
+
+		throw error;
+	}
+};
+
+export const handle: Handle = sequence(
+	handleRequestLogging, 
+	handleBetterAuth
+);
