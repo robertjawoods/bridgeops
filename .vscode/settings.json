@@ -1,5 +1,7 @@
 {
     "json.schemaDownload.trustedDomains": {
-        "https://biomejs.dev/schemas/": true
-    }
+        "https://biomejs.dev/schemas/": true,
+        "https://turbo.build/schema.json": true
+    },
+    "workbench.browser.openLocalhostLinks": false
 }
