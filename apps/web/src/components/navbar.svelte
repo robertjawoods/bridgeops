@@ -32,6 +32,7 @@ const _handleSignOut = async () => {
 
 		{#if session}
 			<a href="/dashboard">Dashboard</a>
+			<a href="/workspaces">Workspaces</a>
 		{/if}
 
 		{#if session && user}

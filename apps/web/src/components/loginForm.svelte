@@ -1,51 +1,51 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { authClient } from '$lib/auth/client/authClient';
+import { enhance } from "$app/forms";
+import { authClient } from "$lib/auth/client/authClient";
 
-	type FieldErrors = Partial<Record<'name' | 'email' | 'password', string>>;
-	type LoginFormData = {
-		fieldErrors?: FieldErrors;
-		message?: string;
-	};
+type FieldErrors = Partial<Record<"name" | "email" | "password", string>>;
+type LoginFormData = {
+	fieldErrors?: FieldErrors;
+	message?: string;
+};
 
-	let {
-		form,
-		action,
-		submitLabel,
-		showName = false,
-		alternateHref,
-		alternateLabel,
-		heading,
-		magicLinkAction,
-		redirectTo = '/dashboard'
-	}: {
-		form: LoginFormData | null;
-		action: string;
-		submitLabel: string;
-		showName?: boolean;
-		alternateHref: string;
-		alternateLabel: string;
-		heading?: string;
-		magicLinkAction?: string;
-		redirectTo?: string;
-	} = $props();
+let {
+	form,
+	action,
+	submitLabel,
+	showName = false,
+	alternateHref,
+	alternateLabel,
+	heading,
+	magicLinkAction,
+	redirectTo = "/dashboard",
+}: {
+	form: LoginFormData | null;
+	action: string;
+	submitLabel: string;
+	showName?: boolean;
+	alternateHref: string;
+	alternateLabel: string;
+	heading?: string;
+	magicLinkAction?: string;
+	redirectTo?: string;
+} = $props();
 
-	const fieldErrors = $derived((form?.fieldErrors ?? {}) as FieldErrors);
-	const _hasFieldErrors = $derived(Object.keys(fieldErrors).length > 0);
+const fieldErrors = $derived((form?.fieldErrors ?? {}) as FieldErrors);
+const _hasFieldErrors = $derived(Object.keys(fieldErrors).length > 0);
 
-	const _handleGitHubClick = async () => {
-		await authClient.signIn.social({
-			provider: 'github',
-			callbackURL: redirectTo
-		});
-	};
+const _handleGitHubClick = async () => {
+	await authClient.signIn.social({
+		provider: "github",
+		callbackURL: redirectTo,
+	});
+};
 
-	const _handleGoogleClick = async () => {
-		await authClient.signIn.social({
-			provider: 'google',
-			callbackURL: redirectTo
-		});
-	};
+const _handleGoogleClick = async () => {
+	await authClient.signIn.social({
+		provider: "google",
+		callbackURL: redirectTo,
+	});
+};
 </script>
 
 <div class="mx-auto max-w-md space-y-4">

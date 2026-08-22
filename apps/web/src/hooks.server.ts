@@ -70,12 +70,14 @@ const handleRequestLogging: Handle = async ({ event, resolve }) => {
 	}
 };
 
-export const handle: Handle = sequence(
-	handleRequestLogging, 
-	handleBetterAuth
-);
+export const handle: Handle = sequence(handleRequestLogging, handleBetterAuth);
 
-export const handleError: HandleServerError = ({ error, event, status, message }) => {
+export const handleError: HandleServerError = ({
+	error,
+	event,
+	status,
+	message,
+}) => {
 	logger.error(
 		{
 			err: error,

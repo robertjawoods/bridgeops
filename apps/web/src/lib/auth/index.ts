@@ -21,7 +21,7 @@ export const auth = betterAuth({
 			"localhost:5173",
 			"zeke-monohydroxy-unscrupulously.ngrok-free.dev",
 			"bridgeops-web-dev.up.railway.app",
-			"bridgeops.railway.internal:8080"
+			"bridgeops.railway.internal:8080",
 		],
 		fallback: normalizedOrigin,
 		protocol: "auto",
