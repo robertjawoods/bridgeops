@@ -6,6 +6,7 @@ import { handle } from "./errors/handle.js"
 import { setupMiddleware } from "./middleware/index.js"
 export type AppEnv = {
     Variables: {
+        userId: string;
         requestId: string;
         logger: pino.Logger;
     };
