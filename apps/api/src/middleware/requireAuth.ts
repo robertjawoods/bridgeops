@@ -3,8 +3,9 @@ import { createMiddleware } from 'hono/factory'
 import { ENV } from 'varlock/env';
 import { AppError } from '../errors/appError.js';
 import { ERROR_CODES } from '../errors/errorCodes.js';
+import type { AppEnv } from '../app.js';
 
-export const requireAuth = createMiddleware(async (c, next) => {
+export const requireAuth = createMiddleware<AppEnv>(async (c, next) => {
 	const authorization = c.req.header('Authorization')
 	const logger = c.get('logger')
 
@@ -26,7 +27,7 @@ export const requireAuth = createMiddleware(async (c, next) => {
 			audience: `${ENV.APP_URL}`
 		})
 
-		c.set('userId', payload.sub)
+		c.set('userId', payload.sub as string)
 
 		await next()
 	} catch (error) {
