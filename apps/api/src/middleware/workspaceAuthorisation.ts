@@ -17,7 +17,6 @@ export const workspaceAuthorisation = createMiddleware(async (c, next) => {
 			memberships:{
 				some: {
 					userId: userId,
-					active: true,
 				}
 			},
 			slug

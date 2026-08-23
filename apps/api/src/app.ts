@@ -2,8 +2,12 @@ import { prisma } from "@bridgeops/database"
 import { Hono } from "hono"
 import pino from "pino"
 import { handle } from "./errors/handle.js"
+import { handleError } from "./middleware/handleError.js"
 
 import { setupMiddleware } from "./middleware/index.js"
+import z from "zod"
+import { AppError } from "./errors/appError.js"
+import { ERROR_CODES } from "./errors/errorCodes.js"
 export type AppEnv = {
     Variables: {
         userId: string;
@@ -40,7 +44,9 @@ export const createApp = ({
         return c.text('ready');
     })
 
-    const routes = app.route('/api', api);
+    app.route('/api', api);
 
-    return { app, routes };
+    app.onError(handleError);
+
+    return { app };
 }

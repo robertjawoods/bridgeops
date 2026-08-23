@@ -19,6 +19,7 @@
     "@bridgeops/database": "workspace:*",
     "@hono/node-server": "^2.1.0",
     "@hono/structured-logger": "^0.1.0",
+    "@hono/zod-openapi": "^1.6.1",
     "bullmq": "^6.0.8",
     "hono": "^4.13.0",
     "jose": "^6.2.8",
