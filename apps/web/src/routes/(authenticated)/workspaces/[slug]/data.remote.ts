@@ -1,11 +1,10 @@
 import { error } from "@sveltejs/kit";
+import { z } from "zod";
 import { getRequestEvent, query } from "$app/server";
 import { createApiClient } from "$lib/api/apiClient";
-
 import { auth } from "$lib/auth";
-import { logger } from "$lib/logger";
 
-export const getWorkspaces = query(async () => {
+export const getWorkspace = query(z.string(), async (slug) => {
 	const req = getRequestEvent();
 
 	const { token } = await auth.api.getToken({
@@ -17,23 +16,25 @@ export const getWorkspaces = query(async () => {
 	}
 
 	const apiClient = createApiClient(token);
-	const response = await apiClient.v1.workspaces.$get();
+	const response = await apiClient.v1.workspaces[":slug"].$get({
+		param: { slug },
+	});
 
 	if (!response.ok) {
 		const body = await response.text();
 
-		logger.error(
+		console.error(
 			{
 				status: response.status,
 				body,
 			},
-			"Failed to fetch workspaces from API",
+			"Failed to fetch workspace from API",
 		);
 
-		error(500, "Failed to fetch workspaces");
+		error(500, "Failed to fetch workspace");
 	}
 
-	const data = await response.json();
+	const { workspace } = await response.json();
 
-	return data.workspaces;
+	return workspace;
 });
