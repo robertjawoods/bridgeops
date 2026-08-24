@@ -1,0 +1,65 @@
+import { fail, redirect } from "@sveltejs/kit";
+import { z } from "zod";
+import { form, getRequestEvent } from "$app/server";
+import { auth } from "$lib/auth";
+
+const authSchema = z.object({
+	action: z.enum(["login", "magicLink", "forgotPassword"]),
+	email: z.string(),
+	password: z.string().optional(),
+	redirectTo: z.string().default("/"),
+});
+
+const authForm = form(
+	authSchema,
+	async ({ action, email, password, redirectTo }) => {
+		const event = getRequestEvent();
+
+		switch (action) {
+			case "login":
+				try {
+					await auth.api.signInEmail({
+						body: {
+							email,
+							password: password!,
+						},
+						request: event.request,
+					});
+
+					redirect(303, redirectTo);
+				} catch {
+					return {
+						message: "Invalid email or password.",
+					};
+				}
+
+			case "magicLink":
+				await auth.api.signInMagicLink({
+					body: {
+						email,
+						callbackURL: redirectTo,
+					},
+					headers: event.request.headers,
+				});
+
+				return {
+					message: "Check your email for a magic link",
+				};
+
+			case "forgotPassword":
+				await auth.api.requestPasswordReset({
+					body: {
+						email,
+						redirectTo: "/reset-password",
+					},
+					headers: event.request.headers,
+				});
+
+				return {
+					message: "Check your email for a password reset link",
+				};
+		}
+	},
+);
+
+export { authForm };

@@ -11,7 +11,6 @@ let { form }: { form: ActionData | null } = $props();
 <section class="mx-auto max-w-4xl px-4 py-10 sm:py-14">
 	<div class="mx-auto max-w-md space-y-4">
 		<h1 class="text-center text-4xl text-white">Reset your password</h1>
-
 		<form
 			method="POST"
 			action={`?/reset`}
