@@ -5,80 +5,6 @@
 /* eslint-disable */
 export type CoercedEnvSchema = {
   /**
-   * **INFISICAL_CLIENT_ID**  
-   * Infisical credentials are supplied by the local environment or secret provider.  
-   *   
-   * 📚 {@link https://infisical.com/docs/documentation/platform/identities/machine-identities | Infisical Machine Identities}  
-   */
-  INFISICAL_CLIENT_ID?: string;
-  
-  /**
-   * **ORIGIN**  
-   * Public app origin used by Better Auth when constructing absolute URLs.  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M24%2021V9h-2v14h8v-2zm-4-6v-4c0-1.103-.897-2-2-2h-6v14h2v-6h1.48l2.335%206h2.145l-2.333-6H18c1.103%200%202-.897%202-2m-6-4h4v4h-4zM8%2023H4c-1.103%200-2-.897-2-2V9h2v12h4V9h2v12c0%201.103-.897%202-2%202%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  ORIGIN?: string;
-  
-  /**
-   * **BETTER_AUTH_SECRET** 🔐 _sensitive_  
-   * Better Auth secret for signing sessions and tokens.  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  BETTER_AUTH_SECRET: string;
-  
-  /**
-   * **GITHUB_CLIENT_ID**  
-   * GitHub OAuth app credentials.  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  GITHUB_CLIENT_ID: string;
-  
-  /**
-   * **GITHUB_CLIENT_SECRET** 🔐 _sensitive_  
-   * GitHub OAuth app secret.  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  GITHUB_CLIENT_SECRET: string;
-  
-  /**
-   * **RESEND_KEY** 🔐 _sensitive_  
-   * Resend API key for verification emails.  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  RESEND_KEY: string;
-  
-  /**
-   * **BETTER_AUTH_API_KEY** 🔐 _sensitive_  
-   * Better Auth dashboard / infra API key.  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  BETTER_AUTH_API_KEY: string;
-  
-  /**
-   * **GOOGLE_CLIENT_ID**  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  GOOGLE_CLIENT_ID: string;
-  
-  /**
-   * **GOOGLE_CLIENT_SECRET** 🔐 _sensitive_  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  GOOGLE_CLIENT_SECRET: string;
-  
-  /**
-   * **EMAIL_ADDRESS**  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23808080%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%3E%3Cpath%20d%3D%22M17.5%2019.125A9%209%200%201%201%2021%2012c0%205.5-6%205.5-6%202V8%22%2F%3E%3Cpath%20d%3D%22M15%2012v-1.5C15%209.12%2013.657%208%2012%208s-3%201.12-3%202.5V12m6%200v1.5c0%201.38-1.343%202.5-3%202.5s-3-1.12-3-2.5V12%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E)   
-   */
-  EMAIL_ADDRESS: string;
-  
-  /**
-   * **API_URL**  
-   * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M24%2021V9h-2v14h8v-2zm-4-6v-4c0-1.103-.897-2-2-2h-6v14h2v-6h1.48l2.335%206h2.145l-2.333-6H18c1.103%200%202-.897%202-2m-6-4h4v4h-4zM8%2023H4c-1.103%200-2-.897-2-2V9h2v12h4V9h2v12c0%201.103-.897%202-2%202%22%2F%3E%3C%2Fsvg%3E)   
-   */
-  API_URL: string;
-  
-  /**
    * **DATABASE_URL**  
    * Direct PostgreSQL connection string used by Prisma and the database package.  
    * ![icon](data:image/svg+xml;utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23808080%22%20d%3D%22M29%2022h-5a2.003%202.003%200%200%201-2-2v-6a2%202%200%200%201%202-2h5v2h-5v6h5ZM18%2012h-4V8h-2v14h6a2.003%202.003%200%200%200%202-2v-6a2%202%200%200%200-2-2m-4%208v-6h4v6Zm-6-8H3v2h5v2H4a2%202%200%200%200-2%202v2a2%202%200%200%200%202%202h6v-8a2%202%200%200%200-2-2m0%208H4v-2h4Z%22%2F%3E%3C%2Fsvg%3E)   
@@ -87,11 +13,11 @@ export type CoercedEnvSchema = {
   
 };
 
-type _CoercedEnvSchema_f98c4e07 = CoercedEnvSchema;
+type _CoercedEnvSchema_8ea85a4e = CoercedEnvSchema;
 
 declare module 'varlock/env' {
-  export interface TypedEnvSchema extends Readonly<_CoercedEnvSchema_f98c4e07> {}
-  export interface PublicTypedEnvSchema extends Readonly<Pick<_CoercedEnvSchema_f98c4e07, 'INFISICAL_CLIENT_ID' | 'ORIGIN' | 'GITHUB_CLIENT_ID' | 'GOOGLE_CLIENT_ID' | 'EMAIL_ADDRESS' | 'API_URL' | 'DATABASE_URL'>> {}
+  export interface TypedEnvSchema extends Readonly<_CoercedEnvSchema_8ea85a4e> {}
+  export interface PublicTypedEnvSchema extends Readonly<Pick<_CoercedEnvSchema_8ea85a4e, 'DATABASE_URL'>> {}
 }
 
 
@@ -101,17 +27,17 @@ export type EnvSchemaAsStrings = {
       : (CoercedEnvSchema[Property] extends boolean ? ('true' | 'false') : string)
 };
 
-type _EnvSchemaAsStrings_f98c4e07 = EnvSchemaAsStrings;
+type _EnvSchemaAsStrings_8ea85a4e = EnvSchemaAsStrings;
 declare global {
 
   // add types for global import.meta.env
-  interface ImportMetaEnv extends _EnvSchemaAsStrings_f98c4e07 {}
+  interface ImportMetaEnv extends _EnvSchemaAsStrings_8ea85a4e {}
   interface ImportMeta {
     readonly env: ImportMetaEnv;
   }
 
   // add types for global process.env
   namespace NodeJS {
-    interface ProcessEnv extends _EnvSchemaAsStrings_f98c4e07 {}
+    interface ProcessEnv extends _EnvSchemaAsStrings_8ea85a4e {}
   }
 }
