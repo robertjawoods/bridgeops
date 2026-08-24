@@ -21,7 +21,6 @@ export const setupMiddleware = (app: Hono<AppEnv>, rootLogger: pino.Logger) => {
         })
         .use('/api/*', requireAuth)
         .use('/api/v1/workspaces/:slug/*', workspaceAuthorisation)
-
         .use(structuredLogger({
             createLogger: (c) => c.get('logger')
         }))

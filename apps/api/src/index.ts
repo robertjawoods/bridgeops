@@ -13,7 +13,7 @@ const rootLogger = pino({
   }
 })
 
-const { app } = createApp({ rootLogger, api: createV1() });
+const { app } = createApp({ rootLogger, api });
 
 serve({
   fetch: app.fetch,

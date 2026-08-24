@@ -9,7 +9,7 @@ import {
 import type { AppEnv } from "../../app.js";
 import { AppError } from "../../errors/appError.js";
 import { ERROR_CODES } from "../../errors/errorCodes.js";
-import { getWorkspaces, createWorkspace, getWorkspaceBySlug } from "../../services/workspaces/index.js";
+import { WorkspaceService} from "../../services/workspaces/index.js";
 
 const createWorkspaceRoute = createRoute({
     method: "post",
@@ -89,6 +89,36 @@ const getWorkspaceBySlugRoute = createRoute({
 });
 
 
+const switchWorkspaceRoute = createRoute({
+    method: "post",
+    path: "/switch",
+    request: {
+        body: {
+            content: {
+                "application/json": {
+                    schema: z.object({
+                        slug: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: "Workspace switched",
+            content: {
+                "application/json": {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+});
+
+const { getWorkspaces, createWorkspace, getWorkspaceBySlug, switchWorkspace } = new WorkspaceService();
+
 const workspaces = new OpenAPIHono<AppEnv>()
     .openapi(getWorkspacesRoute, async (ctx) => {
         const userId = ctx.get("userId");
@@ -128,6 +158,31 @@ const workspaces = new OpenAPIHono<AppEnv>()
         const workspace = await getWorkspaceBySlug(userId, slug);
 
         return ctx.json({ workspace });
+    })
+    .openapi(switchWorkspaceRoute, async (ctx) => {
+        const { slug } = ctx.req.valid("json");
+
+        const userId = ctx.get("userId");
+
+        if (!userId) {
+            throw new AppError(
+                ERROR_CODES.UNAUTHENTICATED,
+                "User ID not found in request context",
+            );
+        }
+
+        const { slug: switchedSlug } = await switchWorkspace(userId, slug);
+
+        if (!switchedSlug) {
+            throw new AppError(
+                ERROR_CODES.NOT_FOUND,
+                "Workspace not found or user is not a member of the workspace",
+            );
+        }
+
+        // Implement the logic to switch workspace here
+        // For now, just return a success message
+        return ctx.json({ message: `Switched to workspace with slug: ${slug}` });
     });
 
 

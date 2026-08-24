@@ -1,34 +1,35 @@
-import { prisma } from "@bridgeops/database"
+import { prisma, type MembershipRole } from "@bridgeops/database"
 import { Hono } from "hono"
 import pino from "pino"
-import { handle } from "./errors/handle.js"
 import { handleError } from "./middleware/handleError.js"
 
 import { setupMiddleware } from "./middleware/index.js"
-import z from "zod"
-import { AppError } from "./errors/appError.js"
-import { ERROR_CODES } from "./errors/errorCodes.js"
+
 export type AppEnv = {
     Variables: {
         userId: string;
         requestId: string;
         logger: pino.Logger;
+        workspaceId: string;
+        workspaceMembership: { id: string; role: MembershipRole };
+        workspaceRole: MembershipRole;
     };
 };
-
 
 export const createApp = ({
     rootLogger,
     api = new Hono(),
 }: {
     rootLogger: pino.Logger;
-    api?: Hono;
+    api?: Hono<AppEnv>;
 }) => {
-    const app = new Hono<AppEnv>()
+    const app = new Hono<AppEnv>({
+        strict: true,
+    })
 
     setupMiddleware(app, rootLogger)
 
-    app.onError(handle)
+    app.onError(handleError)
 
     app.get('/', (c) => {
         return c.text('Hello BridgeOps!')
@@ -45,8 +46,6 @@ export const createApp = ({
     })
 
     app.route('/api', api);
-
-    app.onError(handleError);
 
     return { app };
 }
