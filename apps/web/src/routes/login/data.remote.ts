@@ -1,4 +1,4 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { z } from "zod";
 import { form, getRequestEvent } from "$app/server";
 import { auth } from "$lib/auth";
@@ -21,7 +21,7 @@ const authForm = form(
 					await auth.api.signInEmail({
 						body: {
 							email,
-							password: password!,
+							password: password as string,
 						},
 						request: event.request,
 					});

@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Lint, typecheck and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The Prisma client is generated into packages/database and is required before
+      # anything that imports @bridgeops/database can be typechecked or run.
+      - name: Generate Prisma client
+        run: pnpm --filter @bridgeops/database generate
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck web
+        run: pnpm --filter web check
+
+      # The integration project starts its own Postgres via Testcontainers, using the
+      # Docker daemon already present on ubuntu-latest. No `services:` block needed.
+      - name: Test
+        run: pnpm test

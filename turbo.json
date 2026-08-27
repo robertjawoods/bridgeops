@@ -27,7 +27,11 @@
       "persistent": true
     },
     "lint": {},
-    "test": {},
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "passThroughEnv": ["DOCKER_HOST", "TESTCONTAINERS_RYUK_DISABLED", "CI"]
+    },
     "format": {},
     "start": {
       "dependsOn": [

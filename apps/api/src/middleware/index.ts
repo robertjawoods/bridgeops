@@ -4,7 +4,6 @@ import type { AppEnv } from "../app.js";
 import { structuredLogger } from "@hono/structured-logger";
 import { requestId } from "hono/request-id";
 import { requireAuth } from "./requireAuth.js";
-import { workspaceAuthorisation } from "./workspaceAuthorisation.js";
 
 export const setupMiddleware = (app: Hono<AppEnv>, rootLogger: pino.Logger) => {
     app
@@ -19,8 +18,12 @@ export const setupMiddleware = (app: Hono<AppEnv>, rootLogger: pino.Logger) => {
 
             await next()
         })
+        // `workspaceAuthorisation` is deliberately NOT registered here. Mounted at
+        // '/api/v1/workspaces/:slug/*' it also matched the bare '/:slug' path (Hono's
+        // trailing `*` matches the empty segment) and swallowed static siblings such as
+        // '/workspaces/switch' as `slug = "switch"`. Routes that need a workspace scope
+        // now declare it themselves via `createRoute({ middleware: [...] })`.
         .use('/api/*', requireAuth)
-        .use('/api/v1/workspaces/:slug/*', workspaceAuthorisation)
         .use(structuredLogger({
             createLogger: (c) => c.get('logger')
         }))

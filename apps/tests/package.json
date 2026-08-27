@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "integration": "QUEUE_URL=redis://localhost:6379 QUEUE_NAME=bridgeops-integration APP_URL=http://localhost:3000 DATABASE_URL=postgresql://localhost:5432/bridgeops vitest --root ../.. --project integration",
+    "test": "vitest run --root ../.. --project integration",
+    "integration": "vitest --root ../.. --project integration",
     "e2e": "not implemented"
   },
   "keywords": [],
@@ -12,7 +13,17 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@testcontainers/postgresql": "^12.1.0",
+    "@types/pg": "^8.23.1",
+    "hono": "^4.13.0",
+    "jose": "^6.2.8",
+    "pg": "^8.23.0",
     "pino": "^10.3.1",
-    "vitest": "^4.1.10"
+    "testcontainers": "^12.1.0",
+    "vitest": "^4.1.11",
+    "zod": "^4.4.3"
+  },
+  "dependencies": {
+    "@bridgeops/database": "workspace:*"
   }
 }

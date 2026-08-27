@@ -1,4 +1,4 @@
-import { prisma, type MembershipRole } from "@bridgeops/database"
+import { prisma, type MembershipRole, type Workspace } from "@bridgeops/database"
 import { Hono } from "hono"
 import pino from "pino"
 import { handleError } from "./middleware/handleError.js"
@@ -10,6 +10,8 @@ export type AppEnv = {
         userId: string;
         requestId: string;
         logger: pino.Logger;
+        /** The full workspace row, resolved by `workspaceAuthorisation`. */
+        workspace: Workspace;
         workspaceId: string;
         workspaceMembership: { id: string; role: MembershipRole };
         workspaceRole: MembershipRole;

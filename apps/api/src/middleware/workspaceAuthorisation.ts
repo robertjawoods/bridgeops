@@ -2,9 +2,11 @@ import { createMiddleware } from 'hono/factory'
 import { AppError } from '../errors/appError.js';
 import { ERROR_CODES } from '../errors/errorCodes.js';
 import { prisma } from '@bridgeops/database';
+import type { AppEnv } from '../app.js';
 
-
-export const workspaceAuthorisation = createMiddleware(async (c, next) => {
+// Typed with AppEnv so the vars this sets are checked here, and so routes that attach it
+// via `createRoute({ middleware: [...] })` keep a typed `ctx` instead of widening to any.
+export const workspaceAuthorisation = createMiddleware<AppEnv>(async (c, next) => {
 	const userId = c.get('userId')
 	const slug = c.req.param('slug')
 
@@ -12,7 +14,7 @@ export const workspaceAuthorisation = createMiddleware(async (c, next) => {
 		throw new AppError(ERROR_CODES.FORBIDDEN, 'Forbidden')
 	}
 
-	const workspace = await prisma.workspace.findFirst({
+	const row = await prisma.workspace.findFirst({
 		where: {
 			memberships:{
 				some: {
@@ -21,8 +23,7 @@ export const workspaceAuthorisation = createMiddleware(async (c, next) => {
 			},
 			slug
 		},
-		select: {
-			id: true,
+		include: {
 			memberships: {
 				where: {
 					userId: userId,
@@ -35,17 +36,23 @@ export const workspaceAuthorisation = createMiddleware(async (c, next) => {
 		}
 	})
 
-	if (!workspace) {
+	if (!row) {
 		throw new AppError(ERROR_CODES.FORBIDDEN, 'Forbidden')
 	}
-	
-	const membership = workspace?.memberships.at(0);
+
+	const membership = row.memberships.at(0);
 
 	if (!membership) {
 		throw new AppError(ERROR_CODES.FORBIDDEN, 'Forbidden')
 	}
 
-	c.set('workspaceId', workspace?.id)
+	// Split the joined memberships off the workspace row: handlers serialise
+	// `workspace` straight into the response body, and the membership rows must not
+	// ride along with it.
+	const { memberships: _memberships, ...workspace } = row
+
+	c.set('workspace', workspace)
+	c.set('workspaceId', workspace.id)
 	c.set('workspaceMembership', membership)
 	c.set('workspaceRole', membership.role)
 

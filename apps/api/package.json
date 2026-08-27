@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "test": "vitest run --root ../.. --project api",
     "build": "tsc",
     "start": "node dist/index.js"
   },

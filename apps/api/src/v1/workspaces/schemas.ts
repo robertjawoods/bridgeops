@@ -41,12 +41,17 @@ export const errorSchema = z.object({
 	error: z.string(),
 });
 
+/**
+ * Shape produced by `@hono/zod-openapi`'s default validation hook.
+ *
+ * The hook returns this response itself rather than throwing, so `handleError` never
+ * sees the ZodError and cannot reshape it. `error.message` is the Zod issue array
+ * serialised as a JSON string — parse it to read `path` and `message` per issue.
+ */
 export const validationErrorSchema = z.object({
-	error: z.literal("Validation failed"),
-	fields: z.array(
-		z.object({
-			field: z.string(),
-			message: z.string(),
-		}),
-	),
+	success: z.literal(false),
+	error: z.object({
+		name: z.literal("ZodError"),
+		message: z.string(),
+	}),
 });

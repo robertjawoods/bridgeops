@@ -9,6 +9,7 @@ import {
 import type { AppEnv } from "../../app.js";
 import { AppError } from "../../errors/appError.js";
 import { ERROR_CODES } from "../../errors/errorCodes.js";
+import { workspaceAuthorisation } from "../../middleware/workspaceAuthorisation.js";
 import { WorkspaceService} from "../../services/workspaces/index.js";
 
 const createWorkspaceRoute = createRoute({
@@ -68,9 +69,20 @@ const getWorkspacesRoute = createRoute({
     },
 });
 
+/**
+ * `workspaceAuthorisation` is attached here rather than mounted app-wide: mounting it at
+ * '/api/v1/workspaces/:slug/*' also captured static siblings like '/switch', because
+ * Hono's trailing `*` matches the empty segment. Declaring it on the route keeps its
+ * scope to exactly the routes that are workspace-scoped.
+ *
+ * It answers before the handler, so a non-member and an unknown slug both get 403 —
+ * neither discloses whether the workspace exists. It also leaves the resolved workspace
+ * on the context, which is what the handler returns.
+ */
 const getWorkspaceBySlugRoute = createRoute({
     method: "get",
-    path: "/:slug",
+    path: "/{slug}",
+    middleware: [workspaceAuthorisation] as const,
     request: {
         params: z.object({
             slug: z.string(),
@@ -82,6 +94,15 @@ const getWorkspaceBySlugRoute = createRoute({
             content: {
                 "application/json": {
                     schema: workspaceResponseSchema,
+                },
+            },
+        },
+
+        403: {
+            description: "Workspace not found, or the user is not a member of it",
+            content: {
+                "application/json": {
+                    schema: errorSchema,
                 },
             },
         },
@@ -117,7 +138,7 @@ const switchWorkspaceRoute = createRoute({
     },
 });
 
-const { getWorkspaces, createWorkspace, getWorkspaceBySlug, switchWorkspace } = new WorkspaceService();
+const { getWorkspaces, createWorkspace, switchWorkspace } = new WorkspaceService();
 
 const workspaces = new OpenAPIHono<AppEnv>()
     .openapi(getWorkspacesRoute, async (ctx) => {
@@ -150,15 +171,8 @@ const workspaces = new OpenAPIHono<AppEnv>()
 
         return ctx.json({ workspace }, 201);
     })
-    .openapi(getWorkspaceBySlugRoute, async (ctx) => {
-        const { slug } = ctx.req.valid("param");
-
-        const userId = ctx.get("userId");
-
-        const workspace = await getWorkspaceBySlug(userId, slug);
-
-        return ctx.json({ workspace });
-    })
+    // Registered ahead of '/{slug}': Hono's RegExpRouter resolves by registration order,
+    // so a later `POST /{slug}` would otherwise shadow this static path.
     .openapi(switchWorkspaceRoute, async (ctx) => {
         const { slug } = ctx.req.valid("json");
 
@@ -171,19 +185,16 @@ const workspaces = new OpenAPIHono<AppEnv>()
             );
         }
 
-        const { slug: switchedSlug } = await switchWorkspace(userId, slug);
+        await switchWorkspace(userId, slug);
 
-        if (!switchedSlug) {
-            throw new AppError(
-                ERROR_CODES.NOT_FOUND,
-                "Workspace not found or user is not a member of the workspace",
-            );
-        }
-
-        // Implement the logic to switch workspace here
-        // For now, just return a success message
         return ctx.json({ message: `Switched to workspace with slug: ${slug}` });
-    });
+    })
+    .openapi(getWorkspaceBySlugRoute, (ctx) =>
+        // `workspaceAuthorisation` looked this up by the `:slug` path param, scoped to
+        // the caller's memberships — any workspace they belong to, not just their active
+        // one. Re-querying by slug here would repeat that exact query.
+        ctx.json({ workspace: ctx.get("workspace") }, 200),
+    );
 
 
 
