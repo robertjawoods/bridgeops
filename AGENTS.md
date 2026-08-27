@@ -191,8 +191,14 @@ Worker / data / infra:
 - `svelte-eslint-parser` needs the Svelte compiler options, but this app passes them inline to
   `sveltekit()` in `vite.config.ts` rather than using a `svelte.config.js`. They are mirrored in
   [apps/web/eslint.config.js](apps/web/eslint.config.js) — change both together.
-- `svelte/no-navigation-without-resolve` is set to **warn**: existing links don't use `resolve()`
-  from `$app/paths` yet. Prefer `resolve()` in new markup.
+- Internal links must go through `resolve()` from `$app/paths`
+  (`svelte/no-navigation-without-resolve`, an error). Static targets take a pathname —
+  `resolve("/login")` — while parameterised ones take the **group-qualified route ID**:
+  `resolve("/(authenticated)/workspaces/[slug]", { slug })`. Route IDs include the
+  `(authenticated)` group even though it never appears in the URL.
+- [apps/web/tsconfig.json](apps/web/tsconfig.json) must keep the `.svelte-kit/*.d.ts` entries in
+  `include`. They are what supply the generated `RouteId` union; drop them and `RouteId` silently
+  degrades to `string`, so `resolve()` stops checking link targets and `$types` gets weaker.
 - Prefer `@bridgeops/api` types over hand-written response interfaces.
 
 ## Database Guardrails

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
 	import { authClient } from "$lib/auth/client/authClient";
 	import type { PageData } from "./$types";
 	import { authForm } from "./data.remote";
@@ -142,7 +143,7 @@
 
 		<p class="text-center text-sm text-[#646e87]">
 			<a
-				href="/signup"
+				href={resolve("/signup")}
 				class="font-medium text-[#98a4f7] underline underline-offset-4"
 			>
 				Need an account? Sign up

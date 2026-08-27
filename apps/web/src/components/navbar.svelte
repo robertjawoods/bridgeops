@@ -2,6 +2,7 @@
 	import type { Session, User } from "better-auth";
 
 	import { invalidateAll } from "$app/navigation";
+	import { resolve } from "$app/paths";
 
 	let {
 		session = null,
@@ -30,11 +31,11 @@
 	<div
 		class="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
 	>
-		<a href="/" class="text-lg font-medium text-white">BridgeOps</a>
+		<a href={resolve("/")} class="text-lg font-medium text-white">BridgeOps</a>
 
 		{#if session}
-			<a href="/dashboard">Dashboard</a>
-			<a href="/workspaces">Workspaces</a>
+			<a href={resolve("/dashboard")}>Dashboard</a>
+			<a href={resolve("/workspaces")}>Workspaces</a>
 		{/if}
 
 		{#if session && user}
@@ -56,13 +57,13 @@
 		{:else}
 			<div class="flex items-center gap-3">
 				<a
-					href="/login"
+					href={resolve("/login")}
 					class="rounded-[9999px] border border-[#939db8] px-5 py-2 text-sm font-medium text-[#c9d3ee] transition hover:border-[#c9d3ee] hover:text-white"
 				>
 					Log in
 				</a>
 				<a
-					href="/signup"
+					href={resolve("/signup")}
 					class="rounded-[9999px] bg-[linear-gradient(353deg,rgb(91,99,211)_17.51%,rgb(124,135,247)_183.08%)] px-5 py-2 text-sm font-medium text-white shadow-[rgba(255,255,255,0.25)_0_1px_3px_0_inset] transition hover:brightness-110"
 				>
 					Sign up

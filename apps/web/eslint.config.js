@@ -41,14 +41,5 @@ export default tseslint.config(
 			},
 		},
 	},
-	{
-		files: ["**/*.svelte"],
-		rules: {
-			// Flags plain `href="/foo"` that should go through `resolve()` from
-			// `$app/paths`. Worth adopting, but it touches every link in the app,
-			// so it warns for now instead of failing CI.
-			"svelte/no-navigation-without-resolve": "warn",
-		},
-	},
 	svelte.configs.prettier,
 );

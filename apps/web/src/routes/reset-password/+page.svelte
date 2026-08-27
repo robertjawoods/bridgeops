@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
+	import { resolve } from "$app/paths";
 	import type { ActionData } from "./$types";
 
 	const _token = page.url.searchParams.get("token");
@@ -52,7 +53,7 @@
 
 		<p class="text-center text-sm text-[#646e87]">
 			<a
-				href="/login"
+				href={resolve("/login")}
 				class="font-medium text-[#98a4f7] underline underline-offset-4"
 			>
 				Back to log in
