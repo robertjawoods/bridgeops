@@ -37,10 +37,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # The Prisma client is generated into packages/database and is required before
-      # anything that imports @bridgeops/database can be typechecked or run.
-      - name: Generate Prisma client
-        run: pnpm --filter @bridgeops/database generate
+      # web imports @bridgeops/api and @bridgeops/database, both of which resolve
+      # their types from dist/. Without this the svelte-check step cannot find the
+      # modules. Covers `prisma generate`, which is the first half of the database
+      # package's build script.
+      - name: Build workspace packages
+        run: pnpm turbo build --filter=@bridgeops/database --filter=@bridgeops/api
 
       - name: Lint
         run: pnpm lint

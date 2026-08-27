@@ -6,7 +6,7 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const redirectTo = data.redirectTo;
+	let redirectTo = $derived(data.redirectTo);
 
 	const _handleGitHubClick = async () => {
 		await authClient.signIn.social({
