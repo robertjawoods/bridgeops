@@ -19,6 +19,11 @@ jobs:
     env:
       INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
       INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+      # Declared @required in apps/web/.env.schema with no infisical() source, so
+      # they come from the environment. Locally that is the gitignored apps/web/.env.
+      # Nothing in CI dials these out; they only need to satisfy the schema's types.
+      EMAIL_ADDRESS: bridgeops@resend.dev
+      API_URL: http://localhost:3000/api
     steps:
       - uses: actions/checkout@v4
 
