@@ -13,6 +13,12 @@ jobs:
   test:
     name: Lint, typecheck and test
     runs-on: ubuntu-latest
+    # Grants the job the Infisical machine-identity secrets, which varlock needs to
+    # resolve `infisical()` values in the .env.schema files during build and check.
+    environment: "BridgeOps / development"
+    env:
+      INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+      INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v4
 
