@@ -1,41 +1,45 @@
-import prettier from 'eslint-config-prettier';
-import path from 'node:path';
-import js from '@eslint/js';
-import svelte from 'eslint-plugin-svelte';
-import { defineConfig, includeIgnoreFile } from 'eslint/config';
-import globals from 'globals';
-import ts from 'typescript-eslint';
+import globals from "globals";
+import svelte from "eslint-plugin-svelte";
+import tseslint from "typescript-eslint";
+import base from "../../eslint.config.base.mjs";
 
-const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
+/**
+ * svelte-eslint-parser normally reads these from `svelte.config.js`, but this
+ * app passes its Svelte options inline to `sveltekit()` in `vite.config.ts`.
+ * `experimental.async` is what lets the parser accept `{#each await ...}` in
+ * markup; keep this in sync with the Vite config.
+ *
+ * @type {import('svelte/compiler').CompileOptions}
+ */
+const svelteConfig = {
+	compilerOptions: {
+		experimental: {
+			async: true,
+		},
+	},
+	kit: {
+		experimental: {
+			remoteFunctions: true,
+		},
+	},
+};
 
-export default defineConfig(
-	includeIgnoreFile(gitignorePath),
-	js.configs.recommended,
-	ts.configs.recommended,
+export default tseslint.config(
+	...base,
 	svelte.configs.recommended,
-	prettier,
-	svelte.configs.prettier,
 	{
-		languageOptions: { globals: { ...globals.browser, ...globals.node } },
-		rules: {
-			// typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
-			// see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
-			'no-undef': 'off'
-		}
+		languageOptions: {
+			globals: { ...globals.browser },
+		},
 	},
 	{
-		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
+		files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
 		languageOptions: {
 			parserOptions: {
-				projectService: true,
-				extraFileExtensions: ['.svelte'],
-				parser: ts.parser
-			}
-		}
+				parser: tseslint.parser,
+				svelteConfig,
+			},
+		},
 	},
-	{
-		// Override or add rule settings here, such as:
-		// 'svelte/button-has-type': 'error'
-		rules: {}
-	}
+	svelte.configs.prettier,
 );

@@ -1,7 +1,13 @@
 {
-    "json.schemaDownload.trustedDomains": {
-        "https://biomejs.dev/schemas/": true,
-        "https://turbo.build/schema.json": true
-    },
-    "workbench.browser.openLocalhostLinks": false
+	"json.schemaDownload.trustedDomains": {
+		"https://turbo.build/schema.json": true
+	},
+	"workbench.browser.openLocalhostLinks": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"eslint.useFlatConfig": true,
+	"eslint.validate": ["javascript", "typescript", "svelte"],
+	"[svelte]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
 }

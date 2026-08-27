@@ -63,6 +63,9 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  activeWorkspaceId String? 
+  activeWorkspace   Workspace? @relation(fields: [activeWorkspaceId], references: [id]) 
+
   memberships Membership[]
 
   comments Comment[]
@@ -137,20 +140,15 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   slug      String   @unique
-
   plan Plan @default(FREE)
-
   deletedAt   DateTime?
   memberships Membership[]
-
   integrations Integration[]
   incidents    Incident[]
-
   auditLogs AuditLog[]
-
   services Service[]
-
   apiKeys ApiKey[]
+  users User[]
 }
 
 model Membership {

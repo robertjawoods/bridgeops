@@ -2,9 +2,16 @@ packages:
   - apps/*
   - packages/*
 allowBuilds:
-  '@prisma/engines': true
+  "@prisma/engines": true
   esbuild: true
   msgpackr-extract: true
   prisma: true
+  # Optional native builds pulled in transitively by testcontainers (used only by the
+  # integration test suite). None are needed: ssh2 falls back to pure JS and cpu-features
+  # is just its optional speedup. Leaving them undeclared makes `pnpm install` exit 1,
+  # which breaks `pnpm test` and `pnpm exec`.
+  cpu-features: false
+  protobufjs: false
+  ssh2: false
 onlyBuiltDependencies:
   - esbuild

@@ -1,52 +1,57 @@
-import { prisma } from "@bridgeops/database"
-import { Hono } from "hono"
-import pino from "pino"
-import { handle } from "./errors/handle.js"
-import { handleError } from "./middleware/handleError.js"
+import {
+	prisma,
+	type MembershipRole,
+	type Workspace,
+} from "@bridgeops/database";
+import { Hono } from "hono";
+import pino from "pino";
+import { handleError } from "./middleware/handleError.js";
 
-import { setupMiddleware } from "./middleware/index.js"
-import z from "zod"
-import { AppError } from "./errors/appError.js"
-import { ERROR_CODES } from "./errors/errorCodes.js"
+import { setupMiddleware } from "./middleware/index.js";
+
 export type AppEnv = {
-    Variables: {
-        userId: string;
-        requestId: string;
-        logger: pino.Logger;
-    };
+	Variables: {
+		userId: string;
+		requestId: string;
+		logger: pino.Logger;
+		/** The full workspace row, resolved by `workspaceAuthorisation`. */
+		workspace: Workspace;
+		workspaceId: string;
+		workspaceMembership: { id: string; role: MembershipRole };
+		workspaceRole: MembershipRole;
+	};
 };
 
-
 export const createApp = ({
-    rootLogger,
-    api = new Hono(),
+	rootLogger,
+	api = new Hono(),
 }: {
-    rootLogger: pino.Logger;
-    api?: Hono;
+	rootLogger: pino.Logger;
+	api?: Hono<AppEnv>;
 }) => {
-    const app = new Hono<AppEnv>()
+	const app = new Hono<AppEnv>({
+		strict: true,
+	});
 
-    setupMiddleware(app, rootLogger)
+	setupMiddleware(app, rootLogger);
 
-    app.onError(handle)
+	app.onError(handleError);
 
-    app.get('/', (c) => {
-        return c.text('Hello BridgeOps!')
-    })
+	app.get("/", (c) => {
+		return c.text("Hello BridgeOps!");
+	});
 
-    app.get('/healthz', (c) => {
-        return c.text("alive")
-    })
+	app.get("/healthz", (c) => {
+		return c.text("alive");
+	});
 
-    app.get('/ready', async (c) => {
-        await prisma.$queryRaw`SELECT 1`;
+	app.get("/ready", async (c) => {
+		await prisma.$queryRaw`SELECT 1`;
 
-        return c.text('ready');
-    })
+		return c.text("ready");
+	});
 
-    app.route('/api', api);
+	app.route("/api", api);
 
-    app.onError(handleError);
-
-    return { app };
-}
+	return { app };
+};

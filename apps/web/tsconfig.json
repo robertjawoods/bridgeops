@@ -12,7 +12,19 @@
 		"strict": true,
 		"moduleResolution": "bundler"
 	},
-	"include": ["env.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "svelte.config.js", "svelte.config.js"]
+	// Mirrors the `include` from .svelte-kit/tsconfig.json (rebased on this
+	// directory) plus varlock's generated env.d.ts. The generated entries are
+	// what make typed routes work: without non-ambient.d.ts, `RouteId` silently
+	// falls back to `string` and `resolve()` stops checking link targets.
+	"include": [
+		"env.d.ts",
+		".svelte-kit/ambient.d.ts",
+		".svelte-kit/non-ambient.d.ts",
+		".svelte-kit/types/**/$types.d.ts",
+		"src/**/*.ts",
+		"src/**/*.js",
+		"src/**/*.svelte"
+	]
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
 	//

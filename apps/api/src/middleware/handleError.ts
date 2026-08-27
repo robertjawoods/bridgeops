@@ -1,51 +1,25 @@
-import z from "zod"
-import { AppError } from "../errors/appError.js"
-import { ERROR_CODES } from "../errors/errorCodes.js"
+import { AppError } from "../errors/appError.js";
+import { ERROR_STATUS } from "../errors/errorCodes.js";
 import type { HTTPResponseError } from "hono/types";
 import type { Context } from "hono";
 import type { AppEnv } from "../app.js";
 
-export const handleError = (error: Error | HTTPResponseError, ctx: Context<AppEnv, any, {}>) => {
-        if (error instanceof z.ZodError) {
-            return ctx.json(
-                {
-                    error: "Validation failed",
-                    fields: error.issues.map(({ path, message }) => ({
-                        field: path.join("."),
-                        message,
-                    })),
-                },
-                400,
-            );
-        }
+/**
+ * Request-validation failures never reach here: `@hono/zod-openapi` intercepts them with
+ * its own default hook and returns a 400 directly, so a ZodError branch in this handler
+ * would be dead code. See `validationErrorSchema` for the shape that hook produces.
+ */
+export const handleError = (
+	error: Error | HTTPResponseError,
+	ctx: Context<AppEnv>,
+) => {
+	ctx.get("logger")?.error({ err: error }, "Request error");
 
-        if (error instanceof AppError) {
-            switch (error.code) {
-                case ERROR_CODES.UNAUTHENTICATED:
-                    return ctx.json(
-                        { error: error.message },
-                        401,
-                    );
+	if (error instanceof AppError) {
+		return ctx.json({ error: error.message }, ERROR_STATUS[error.code] ?? 500);
+	}
 
-                case ERROR_CODES.CONFLICT:
-                    return ctx.json(
-                        { error: error.message },
-                        409,
-                    );
-
-                // other application error codes...
-            }
-        }
-
-        ctx.get("logger")?.error(
-            { err: error },
-            "Unhandled application error",
-        );
-
-        return ctx.json(
-            { error: "Internal server error" },
-            500,
-        );
+	return ctx.json({ error: "Internal server error" }, 500);
 };
 
 export default handleError;

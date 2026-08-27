@@ -1,8 +1,5 @@
 <script lang="ts">
-import type { PageProps } from "./$types";
-import { createWorkspace } from "./data.remote";
-
-let { data }: PageProps = $props();
+	import { createWorkspace } from "./data.remote";
 </script>
 
 <form {...createWorkspace} class="flex max-w-md flex-col gap-4">

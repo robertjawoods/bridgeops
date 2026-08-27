@@ -1,31 +1,39 @@
 {
-  "name": "bridgeops",
-  "private": true,
-  "scripts": {
-    "dev": "env -u DATABASE_URL pnpm exec varlock run -- env _VARLOCK_USE_INJECTED_ENV=1 turbo dev",
-    "build": "turbo build",
-    "lint": "turbo lint",
-    "test": "turbo test",
-    "format": "turbo format",
-    "generate": "pnpm --filter @bridgeops/database generate",
-    "start": "turbo start"
-  },
-  "devDependencies": {
-    "@varlock/infisical-plugin": "^2.1.0",
-    "turbo": "^2",
-    "typescript": "^5",
-    "vitest": "^4.1.10"
-  },
-  "packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee",
-  "dependencies": {
-    "varlock": "^1.16.1"
-  },
-  "varlock": {
-    "loadPath": [
-      "apps/api",
-      "apps/web",
-      "apps/worker",
-      "packages/database"
-    ]
-  }
+	"name": "bridgeops",
+	"private": true,
+	"scripts": {
+		"dev": "env -u DATABASE_URL pnpm exec varlock run -- env _VARLOCK_USE_INJECTED_ENV=1 turbo dev",
+		"build": "turbo build",
+		"start": "turbo start",
+		"lint": "turbo lint && eslint .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"test": "turbo test",
+		"generate": "pnpm --filter @bridgeops/database generate"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"@varlock/infisical-plugin": "^2.1.0",
+		"@vitest/coverage-v8": "^4.1.11",
+		"eslint": "^10.8.0",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.9.0",
+		"prettier": "^3.9.6",
+		"turbo": "^2",
+		"typescript": "^5",
+		"typescript-eslint": "^8.66.0",
+		"vitest": "^4.1.11"
+	},
+	"packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee",
+	"dependencies": {
+		"varlock": "^1.16.1"
+	},
+	"varlock": {
+		"loadPath": [
+			"apps/api",
+			"apps/web",
+			"apps/worker",
+			"packages/database"
+		]
+	}
 }

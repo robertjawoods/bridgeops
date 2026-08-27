@@ -1,44 +1,37 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalPassThroughEnv": [
-    "DATABASE_URL",
-    "__VARLOCK_ENV",
-    "_VARLOCK_ENV_KEY",
-    "_VARLOCK_USE_INJECTED_ENV"
-  ],
-  "tasks": {
-    "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**",
-        ".svelte-kit/**"
-      ],
-      "passThroughEnv": [
-        "INFISICAL_CLIENT_ID",
-        "INFISICAL_CLIENT_SECRET",
-        "API_URL",
-        "EMAIL_ADDRESS"
-      ]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "lint": {},
-    "test": {},
-    "format": {},
-    "start": {
-      "dependsOn": [
-        "^build"
-      ],
-      "cache": false,
-      "persistent": true,
-      "passThroughEnv": [
-        "QUEUE_NAME",
-        "QUEUE_URL"
-      ]
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"globalPassThroughEnv": [
+		"DATABASE_URL",
+		"__VARLOCK_ENV",
+		"_VARLOCK_ENV_KEY",
+		"_VARLOCK_USE_INJECTED_ENV"
+	],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**", ".svelte-kit/**"],
+			"passThroughEnv": [
+				"INFISICAL_CLIENT_ID",
+				"INFISICAL_CLIENT_SECRET",
+				"API_URL",
+				"EMAIL_ADDRESS"
+			]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"lint": {},
+		"test": {
+			"dependsOn": ["^build"],
+			"outputs": [],
+			"passThroughEnv": ["DOCKER_HOST", "TESTCONTAINERS_RYUK_DISABLED", "CI"]
+		},
+		"start": {
+			"dependsOn": ["^build"],
+			"cache": false,
+			"persistent": true,
+			"passThroughEnv": ["QUEUE_NAME", "QUEUE_URL"]
+		}
+	}
 }
