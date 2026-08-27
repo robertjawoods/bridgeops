@@ -7,9 +7,12 @@ import { prisma } from "@bridgeops/database";
  */
 
 let counter = 0;
-const unique = (prefix: string) => `${prefix}-${Date.now().toString(36)}-${++counter}`;
+const unique = (prefix: string) =>
+	`${prefix}-${Date.now().toString(36)}-${++counter}`;
 
-export const createUser = (overrides: { email?: string; name?: string; username?: string } = {}) =>
+export const createUser = (
+	overrides: { email?: string; name?: string; username?: string } = {},
+) =>
 	prisma.user.create({
 		data: {
 			email: overrides.email ?? `${unique("user")}@example.test`,
@@ -18,7 +21,9 @@ export const createUser = (overrides: { email?: string; name?: string; username?
 		},
 	});
 
-export const createWorkspace = (overrides: { name?: string; slug?: string } = {}) =>
+export const createWorkspace = (
+	overrides: { name?: string; slug?: string } = {},
+) =>
 	prisma.workspace.create({
 		data: {
 			name: overrides.name ?? "Test Workspace",
@@ -26,8 +31,11 @@ export const createWorkspace = (overrides: { name?: string; slug?: string } = {}
 		},
 	});
 
-export const addMember = (userId: string, workspaceId: string, role: MembershipRole = "OWNER") =>
-	prisma.membership.create({ data: { userId, workspaceId, role } });
+export const addMember = (
+	userId: string,
+	workspaceId: string,
+	role: MembershipRole = "OWNER",
+) => prisma.membership.create({ data: { userId, workspaceId, role } });
 
 /** A workspace the given user is a member of — the common setup for authorised requests. */
 export const createWorkspaceForUser = async (

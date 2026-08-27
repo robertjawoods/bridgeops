@@ -42,6 +42,7 @@ The browser never talks to the API directly — the web app is the only client.
 - Generate Prisma client: `pnpm generate`
 
 Package-specific commands:
+
 - Web dev / typecheck / lint: `pnpm --filter web dev` · `pnpm --filter web check` · `pnpm --filter web lint`
 - API dev: `pnpm --filter @bridgeops/api dev`
 - Worker dev: `pnpm --filter worker dev`
@@ -52,8 +53,11 @@ Package-specific commands:
 ### Turbo task coverage (important)
 
 Turbo pipelines only run where a package actually defines the script:
-- `lint` → **web only** (`biome lint src`). API, worker, and database have no lint script.
-- `format` → **web only** (Prettier).
+
+- `lint` → **every package** (`eslint .`). `pnpm lint` runs those via Turbo, then lints
+  root-level files (`vitest.config.ts`, `scripts/`) with the root config.
+- `format` → **not a Turbo task**. Prettier runs once over the whole repo from the root:
+  `pnpm format` (write) / `pnpm format:check` (CI-style check).
 - `test` → **no package defines it**, so `pnpm test` is currently a no-op. Run tests with root Vitest (below).
 - `build` → api, web, worker, database.
 
@@ -61,11 +65,11 @@ Turbo pipelines only run where a package actually defines the script:
 
 Vitest is configured once at the repo root ([vitest.config.ts](vitest.config.ts)) with three projects:
 
-| Project | Includes | Notes |
-| --- | --- | --- |
-| `api` | `apps/api/**/*.test.ts` | Pure unit tests, no external services |
-| `packages` | `packages/**/*.test.ts` | Pure unit tests |
-| `integration` | `apps/tests/integration/**/*.ts` | Boots the Hono app in-process |
+| Project       | Includes                         | Notes                                 |
+| ------------- | -------------------------------- | ------------------------------------- |
+| `api`         | `apps/api/**/*.test.ts`          | Pure unit tests, no external services |
+| `packages`    | `packages/**/*.test.ts`          | Pure unit tests                       |
+| `integration` | `apps/tests/integration/**/*.ts` | Boots the Hono app in-process         |
 
 Run them from the repo root:
 
@@ -83,18 +87,21 @@ queue or a silent logger. See [apps/tests/integration/index.ts](apps/tests/integ
 ## Key File Map
 
 Web:
+
 - Auth setup: [apps/web/src/lib/auth/index.ts](apps/web/src/lib/auth/index.ts)
 - Auth client: [apps/web/src/lib/auth/client/authClient.ts](apps/web/src/lib/auth/client/authClient.ts)
 - Auth request handling + request logging: [apps/web/src/hooks.server.ts](apps/web/src/hooks.server.ts)
 - Root session/user propagation: [apps/web/src/routes/+layout.server.ts](apps/web/src/routes/+layout.server.ts)
-- Authenticated route guard: [apps/web/src/routes/(authenticated)/+layout.server.ts](apps/web/src/routes/(authenticated)/+layout.server.ts)
+- Authenticated route guard: [apps/web/src/routes/(authenticated)/+layout.server.ts](<apps/web/src/routes/(authenticated)/+layout.server.ts>)
 - Typed API client (Hono RPC): [apps/web/src/lib/api/apiClient.ts](apps/web/src/lib/api/apiClient.ts)
 - Locals typing: [apps/web/src/app.d.ts](apps/web/src/app.d.ts)
 - Design tokens / global CSS: [apps/web/src/routes/layout.css](apps/web/src/routes/layout.css)
 - Web build/runtime config: [apps/web/vite.config.ts](apps/web/vite.config.ts)
-- Biome config: [apps/web/biome.json](apps/web/biome.json)
+- ESLint config: [apps/web/eslint.config.js](apps/web/eslint.config.js) (extends [eslint.config.base.mjs](eslint.config.base.mjs))
+- Prettier config: [apps/web/prettier.config.js](apps/web/prettier.config.js) (extends [prettier.config.mjs](prettier.config.mjs))
 
 API:
+
 - Server entry: [apps/api/src/index.ts](apps/api/src/index.ts)
 - App factory: [apps/api/src/app.ts](apps/api/src/app.ts)
 - Middleware wiring: [apps/api/src/middleware/index.ts](apps/api/src/middleware/index.ts)
@@ -105,6 +112,7 @@ API:
 - Queue producer: [apps/api/src/v1/jobs/index.ts](apps/api/src/v1/jobs/index.ts)
 
 Worker / data / infra:
+
 - Worker entry: [apps/worker/src/index.ts](apps/worker/src/index.ts)
 - DB package entry: [packages/database/src/index.ts](packages/database/src/index.ts)
 - Prisma client construction: [packages/database/src/client.ts](packages/database/src/client.ts)
@@ -176,10 +184,15 @@ Worker / data / infra:
   - `form(zodSchema, handler)` for mutations
 - The standard remote-function shape is: `getRequestEvent()` → `auth.api.getToken({ headers })` →
   `createApiClient(token)` → call the typed client → log + `error(...)` on failure. Follow
-  [apps/web/src/routes/(authenticated)/workspaces/data.remote.ts](apps/web/src/routes/(authenticated)/workspaces/data.remote.ts) as the reference.
+  [apps/web/src/routes/(authenticated)/workspaces/data.remote.ts](<apps/web/src/routes/(authenticated)/workspaces/data.remote.ts>) as the reference.
 - Authenticated pages live under the `(authenticated)` route group; the group layout enforces the redirect-to-login guard.
-- Lint with Biome (`pnpm --filter web lint`); format with Prettier (`pnpm --filter web format`).
-  The Biome Vite plugin also runs in check mode during dev.
+- Lint with ESLint (`pnpm --filter web lint`); format with Prettier (`pnpm format` from the root).
+  Nothing lints during `vite dev` any more — run the scripts or rely on the editor.
+- `svelte-eslint-parser` needs the Svelte compiler options, but this app passes them inline to
+  `sveltekit()` in `vite.config.ts` rather than using a `svelte.config.js`. They are mirrored in
+  [apps/web/eslint.config.js](apps/web/eslint.config.js) — change both together.
+- `svelte/no-navigation-without-resolve` is set to **warn**: existing links don't use `resolve()`
+  from `$app/paths` yet. Prefer `resolve()` in new markup.
 - Prefer `@bridgeops/api` types over hand-written response interfaces.
 
 ## Database Guardrails

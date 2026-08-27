@@ -31,7 +31,9 @@ const seed = async () => {
 	});
 
 	await prisma.membership.upsert({
-		where: { userId_workspaceId: { userId: user.id, workspaceId: workspace.id } },
+		where: {
+			userId_workspaceId: { userId: user.id, workspaceId: workspace.id },
+		},
 		update: {},
 		create: { userId: user.id, workspaceId: workspace.id, role: "OWNER" },
 	});
@@ -41,7 +43,9 @@ const seed = async () => {
 		data: { activeWorkspaceId: workspace.id },
 	});
 
-	console.log(`Seeded ${user.email} as OWNER of "${workspace.name}" (/${workspace.slug})`);
+	console.log(
+		`Seeded ${user.email} as OWNER of "${workspace.name}" (/${workspace.slug})`,
+	);
 };
 
 seed()

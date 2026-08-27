@@ -1,11 +1,11 @@
 <script lang="ts">
-import type { PageProps } from "./$types";
+	import type { PageProps } from "./$types";
 
-import { getWorkspace } from "./data.remote";
+	import { getWorkspace } from "./data.remote";
 
-let { params }: PageProps = $props();
+	let { params }: PageProps = $props();
 
-const workspace = $derived(await getWorkspace(params.slug));
+	const workspace = $derived(await getWorkspace(params.slug));
 </script>
 
 {#if workspace}

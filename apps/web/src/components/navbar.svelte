@@ -1,33 +1,35 @@
 <script lang="ts">
-import type { Session, User } from "better-auth";
+	import type { Session, User } from "better-auth";
 
-import { invalidateAll } from "$app/navigation";
+	import { invalidateAll } from "$app/navigation";
 
-let {
-	session = null,
-	user = null,
-}: { session?: Session | null; user?: User | null } = $props();
+	let {
+		session = null,
+		user = null,
+	}: { session?: Session | null; user?: User | null } = $props();
 
-import { createAuthClient } from "better-auth/client";
+	import { createAuthClient } from "better-auth/client";
 
-const authClient = createAuthClient();
+	const authClient = createAuthClient();
 
-const _handleSignOut = async () => {
-	// Implement sign-out logic here
-	var { data } = await authClient.signOut();
+	const _handleSignOut = async () => {
+		// Implement sign-out logic here
+		var { data } = await authClient.signOut();
 
-	if (data?.success) {
-		await invalidateAll();
-	}
+		if (data?.success) {
+			await invalidateAll();
+		}
 
-	console.log("Sign out clicked");
-};
+		console.log("Sign out clicked");
+	};
 </script>
 
 <nav
 	class="border-b border-[#1f2433] bg-[#0f101a]/95 shadow-[rgba(255,255,255,0.25)_0_1px_3px_0_inset] backdrop-blur"
 >
-	<div class="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+	<div
+		class="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
+	>
 		<a href="/" class="text-lg font-medium text-white">BridgeOps</a>
 
 		{#if session}
@@ -38,7 +40,9 @@ const _handleSignOut = async () => {
 		{#if session && user}
 			<div class="flex items-center gap-3">
 				<div class="hidden text-right sm:block">
-					<div class="text-sm font-medium text-[#c9d3ee]">{user.name ?? user.email}</div>
+					<div class="text-sm font-medium text-[#c9d3ee]">
+						{user.name ?? user.email}
+					</div>
 					<div class="text-xs text-[#646e87]">Signed in</div>
 				</div>
 				<button

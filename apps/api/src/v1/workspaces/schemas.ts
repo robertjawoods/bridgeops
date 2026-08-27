@@ -29,12 +29,11 @@ export const createWorkspaceSchema = z.object({
 });
 
 export const workspaceResponseSchema = z.object({
-    workspace: workspaceSchema,
+	workspace: workspaceSchema,
 });
 
-
 export const getWorkspacesResponseSchema = z.object({
-    workspaces: z.array(workspaceSchema),
+	workspaces: z.array(workspaceSchema),
 });
 
 export const errorSchema = z.object({

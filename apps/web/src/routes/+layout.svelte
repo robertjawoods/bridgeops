@@ -1,9 +1,9 @@
 <script lang="ts">
-import "./layout.css";
+	import "./layout.css";
 
-import Navbar from "../components/navbar.svelte";
+	import Navbar from "../components/navbar.svelte";
 
-let { children, data } = $props();
+	let { children, data } = $props();
 </script>
 
 <svelte:head>

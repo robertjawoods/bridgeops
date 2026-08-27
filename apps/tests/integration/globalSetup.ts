@@ -34,7 +34,9 @@ let container: StartedPostgreSqlContainer | undefined;
  */
 const assertThrowawayDatabase = (url: string) => {
 	const { hostname, pathname } = new URL(url);
-	const isLocal = ["localhost", "127.0.0.1", "0.0.0.0", "::1"].includes(hostname);
+	const isLocal = ["localhost", "127.0.0.1", "0.0.0.0", "::1"].includes(
+		hostname,
+	);
 
 	if (!isLocal || !pathname.includes("test")) {
 		throw new Error(
@@ -88,6 +90,7 @@ export async function setup({ provide }: GlobalSetupContext) {
 		const { stdout, stderr } = error as { stdout?: Buffer; stderr?: Buffer };
 		throw new Error(
 			`prisma migrate deploy failed:\n${stdout?.toString() ?? ""}\n${stderr?.toString() ?? ""}`,
+			{ cause: error },
 		);
 	}
 

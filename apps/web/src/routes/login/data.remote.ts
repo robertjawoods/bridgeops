@@ -25,13 +25,16 @@ const authForm = form(
 						},
 						request: event.request,
 					});
-
-					redirect(303, redirectTo);
 				} catch {
 					return {
 						message: "Invalid email or password.",
 					};
 				}
+
+				// `redirect` throws (and is typed `never`), so it has to sit outside
+				// the try — inside it, the catch above would swallow the redirect
+				// and report a bad login instead.
+				return redirect(303, redirectTo);
 
 			case "magicLink":
 				await auth.api.signInMagicLink({

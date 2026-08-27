@@ -12,7 +12,8 @@ import { afterAll, beforeAll, beforeEach, inject } from "vitest";
  */
 process.env.DATABASE_URL = inject("databaseUrl");
 
-const { startJwksServer, setActiveJwksServer } = await import("./helpers/auth.js");
+const { startJwksServer, setActiveJwksServer } =
+	await import("./helpers/auth.js");
 const { resetDatabase, disconnectDatabase } = await import("./helpers/db.js");
 
 let jwksServer: Awaited<ReturnType<typeof startJwksServer>> | undefined;

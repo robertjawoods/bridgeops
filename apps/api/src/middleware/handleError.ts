@@ -1,5 +1,5 @@
-import { AppError } from "../errors/appError.js"
-import { ERROR_STATUS } from "../errors/errorCodes.js"
+import { AppError } from "../errors/appError.js";
+import { ERROR_STATUS } from "../errors/errorCodes.js";
 import type { HTTPResponseError } from "hono/types";
 import type { Context } from "hono";
 import type { AppEnv } from "../app.js";
@@ -9,20 +9,17 @@ import type { AppEnv } from "../app.js";
  * its own default hook and returns a 400 directly, so a ZodError branch in this handler
  * would be dead code. See `validationErrorSchema` for the shape that hook produces.
  */
-export const handleError = (error: Error | HTTPResponseError, ctx: Context<AppEnv, any, {}>) => {
-        ctx.get("logger")?.error({ err: error }, "Request error");
+export const handleError = (
+	error: Error | HTTPResponseError,
+	ctx: Context<AppEnv>,
+) => {
+	ctx.get("logger")?.error({ err: error }, "Request error");
 
-        if (error instanceof AppError) {
-            return ctx.json(
-                { error: error.message },
-                ERROR_STATUS[error.code] ?? 500,
-            );
-        }
+	if (error instanceof AppError) {
+		return ctx.json({ error: error.message }, ERROR_STATUS[error.code] ?? 500);
+	}
 
-        return ctx.json(
-            { error: "Internal server error" },
-            500,
-        );
+	return ctx.json({ error: "Internal server error" }, 500);
 };
 
 export default handleError;

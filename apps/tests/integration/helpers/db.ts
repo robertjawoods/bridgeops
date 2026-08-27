@@ -17,9 +17,13 @@ export const resetDatabase = async () => {
 
 	if (tables.length === 0) return;
 
-	const quoted = tables.map(({ tablename }) => `"public"."${tablename}"`).join(", ");
+	const quoted = tables
+		.map(({ tablename }) => `"public"."${tablename}"`)
+		.join(", ");
 
-	await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${quoted} RESTART IDENTITY CASCADE`);
+	await prisma.$executeRawUnsafe(
+		`TRUNCATE TABLE ${quoted} RESTART IDENTITY CASCADE`,
+	);
 };
 
 export const disconnectDatabase = () => prisma.$disconnect();

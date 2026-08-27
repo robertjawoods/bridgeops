@@ -43,9 +43,13 @@ const buildHarness = (userId?: string) => {
 
 describe("workspaceAuthorisation", () => {
 	it("populates the workspace context for a member", async () => {
-		const { user, workspace } = await createUserWithWorkspace({ slug: "platform" });
+		const { user, workspace } = await createUserWithWorkspace({
+			slug: "platform",
+		});
 
-		const response = await buildHarness(user.id).request("/workspaces/platform/probe");
+		const response = await buildHarness(user.id).request(
+			"/workspaces/platform/probe",
+		);
 
 		expect(response.status).toBe(200);
 		expect(await response.json()).toMatchObject({
@@ -56,10 +60,16 @@ describe("workspaceAuthorisation", () => {
 	});
 
 	it("exposes the full workspace row without the joined memberships", async () => {
-		const { user, workspace } = await createUserWithWorkspace({ slug: "platform" });
+		const { user, workspace } = await createUserWithWorkspace({
+			slug: "platform",
+		});
 
-		const response = await buildHarness(user.id).request("/workspaces/platform/probe");
-		const body = (await response.json()) as { workspace: Record<string, unknown> };
+		const response = await buildHarness(user.id).request(
+			"/workspaces/platform/probe",
+		);
+		const body = (await response.json()) as {
+			workspace: Record<string, unknown>;
+		};
 
 		expect(body.workspace).toMatchObject({
 			id: workspace.id,
@@ -79,7 +89,9 @@ describe("workspaceAuthorisation", () => {
 			const user = await createUser();
 			await createWorkspaceForUser(user.id, { slug: "platform", role });
 
-			const response = await buildHarness(user.id).request("/workspaces/platform/probe");
+			const response = await buildHarness(user.id).request(
+				"/workspaces/platform/probe",
+			);
 
 			expect(await response.json()).toMatchObject({ workspaceRole: role });
 		},
@@ -88,7 +100,9 @@ describe("workspaceAuthorisation", () => {
 	it("resolves the membership of the requesting user, not another member", async () => {
 		const owner = await createUser();
 		const viewer = await createUser();
-		const workspace = await createWorkspaceForUser(owner.id, { slug: "platform" });
+		const workspace = await createWorkspaceForUser(owner.id, {
+			slug: "platform",
+		});
 		await createWorkspaceForUser(viewer.id, { slug: "ignored" });
 		await import("./helpers/db.js").then(({ prisma }) =>
 			prisma.membership.create({
@@ -96,7 +110,9 @@ describe("workspaceAuthorisation", () => {
 			}),
 		);
 
-		const response = await buildHarness(viewer.id).request("/workspaces/platform/probe");
+		const response = await buildHarness(viewer.id).request(
+			"/workspaces/platform/probe",
+		);
 
 		expect(await response.json()).toMatchObject({
 			workspaceId: workspace.id,
@@ -108,7 +124,9 @@ describe("workspaceAuthorisation", () => {
 		it("when there is no userId in context", async () => {
 			await createWorkspace({ slug: "platform" });
 
-			const response = await buildHarness(undefined).request("/workspaces/platform/probe");
+			const response = await buildHarness(undefined).request(
+				"/workspaces/platform/probe",
+			);
 
 			expect(response.status).toBe(403);
 			expect(await response.json()).toEqual({ error: "Forbidden" });
@@ -118,7 +136,9 @@ describe("workspaceAuthorisation", () => {
 			const outsider = await createUser();
 			await createWorkspace({ slug: "platform" });
 
-			const response = await buildHarness(outsider.id).request("/workspaces/platform/probe");
+			const response = await buildHarness(outsider.id).request(
+				"/workspaces/platform/probe",
+			);
 
 			expect(response.status).toBe(403);
 		});
@@ -126,7 +146,9 @@ describe("workspaceAuthorisation", () => {
 		it("when the slug does not exist", async () => {
 			const user = await createUser();
 
-			const response = await buildHarness(user.id).request("/workspaces/nope/probe");
+			const response = await buildHarness(user.id).request(
+				"/workspaces/nope/probe",
+			);
 
 			expect(response.status).toBe(403);
 		});
@@ -135,12 +157,15 @@ describe("workspaceAuthorisation", () => {
 			const user = await createUser();
 			await createWorkspace({ slug: "real-workspace" });
 
-			const existing = await buildHarness(user.id).request("/workspaces/real-workspace/probe");
-			const missing = await buildHarness(user.id).request("/workspaces/no-such-thing/probe");
+			const existing = await buildHarness(user.id).request(
+				"/workspaces/real-workspace/probe",
+			);
+			const missing = await buildHarness(user.id).request(
+				"/workspaces/no-such-thing/probe",
+			);
 
 			expect(existing.status).toBe(missing.status);
 			expect(await existing.json()).toEqual(await missing.json());
 		});
 	});
-
 });

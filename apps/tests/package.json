@@ -1,29 +1,30 @@
 {
-  "name": "tests",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "vitest run --root ../.. --project integration",
-    "integration": "vitest --root ../.. --project integration",
-    "e2e": "not implemented"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
-  "devDependencies": {
-    "@testcontainers/postgresql": "^12.1.0",
-    "@types/pg": "^8.23.1",
-    "hono": "^4.13.0",
-    "jose": "^6.2.8",
-    "pg": "^8.23.0",
-    "pino": "^10.3.1",
-    "testcontainers": "^12.1.0",
-    "vitest": "^4.1.11",
-    "zod": "^4.4.3"
-  },
-  "dependencies": {
-    "@bridgeops/database": "workspace:*"
-  }
+	"name": "tests",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "vitest run --root ../.. --project integration",
+		"integration": "vitest --root ../.. --project integration",
+		"e2e": "not implemented",
+		"lint": "eslint ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "module",
+	"devDependencies": {
+		"@testcontainers/postgresql": "^12.1.0",
+		"@types/pg": "^8.23.1",
+		"hono": "^4.13.0",
+		"jose": "^6.2.8",
+		"pg": "^8.23.0",
+		"pino": "^10.3.1",
+		"testcontainers": "^12.1.0",
+		"vitest": "^4.1.11",
+		"zod": "^4.4.3"
+	},
+	"dependencies": {
+		"@bridgeops/database": "workspace:*"
+	}
 }

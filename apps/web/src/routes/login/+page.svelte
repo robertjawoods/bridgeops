@@ -1,25 +1,25 @@
 <script lang="ts">
-import { authClient } from "$lib/auth/client/authClient";
-import type { PageData } from "./$types";
-import { authForm } from "./data.remote";
+	import { authClient } from "$lib/auth/client/authClient";
+	import type { PageData } from "./$types";
+	import { authForm } from "./data.remote";
 
-let { data }: { data: PageData } = $props();
+	let { data }: { data: PageData } = $props();
 
-const redirectTo = data.redirectTo;
+	const redirectTo = data.redirectTo;
 
-const _handleGitHubClick = async () => {
-	await authClient.signIn.social({
-		provider: "github",
-		callbackURL: redirectTo,
-	});
-};
+	const _handleGitHubClick = async () => {
+		await authClient.signIn.social({
+			provider: "github",
+			callbackURL: redirectTo,
+		});
+	};
 
-const _handleGoogleClick = async () => {
-	await authClient.signIn.social({
-		provider: "google",
-		callbackURL: redirectTo,
-	});
-};
+	const _handleGoogleClick = async () => {
+		await authClient.signIn.social({
+			provider: "google",
+			callbackURL: redirectTo,
+		});
+	};
 </script>
 
 <section class="mx-auto max-w-4xl px-4 py-10 sm:py-14">
@@ -99,7 +99,11 @@ const _handleGoogleClick = async () => {
 				onclick={_handleGitHubClick}
 				class="flex items-center justify-center gap-3 rounded-[10px] border border-[#1f2433] bg-[#0f101a] px-4 py-3 font-medium text-[#c9d3ee] transition hover:border-[#939db8] hover:text-white focus:ring-2 focus:ring-[#98a4f7]/40 focus:outline-none"
 			>
-				<svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5 fill-current">
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					class="h-5 w-5 fill-current"
+				>
 					<path
 						d="M12 0.5C5.37 0.5 0 5.87 0 12.5C0 17.8 3.44 22.29 8.21 23.88C8.81 23.99 9.03 23.62 9.03 23.3C9.03 23.01 9.02 22.05 9.01 20.77C5.67 21.5 4.97 19.16 4.97 19.16C4.42 17.76 3.63 17.39 3.63 17.39C2.55 16.65 3.71 16.67 3.71 16.67C4.91 16.75 5.54 17.91 5.54 17.91C6.6 19.73 8.32 19.21 9 18.9C9.11 18.13 9.42 17.61 9.76 17.32C7.09 17.02 4.29 15.98 4.29 11.34C4.29 10.02 4.76 8.94 5.53 8.08C5.41 7.78 4.99 6.56 5.65 4.91C5.65 4.91 6.66 4.59 8.97 6.15C9.93 5.88 10.96 5.75 12 5.75C13.04 5.75 14.07 5.88 15.03 6.15C17.34 4.59 18.35 4.91 18.35 4.91C19.01 6.56 18.59 7.78 18.47 8.08C18.35 8.4 18.35 8.77 18.35 9.16C18.35 9.16 19.71 8.94 19.71 11.34C19.71 16 16.9 17.01 14.22 17.31C14.65 17.68 15.04 18.42 15.04 19.56C15.04 21.19 15.03 22.84 15.03 23.3C15.03 23.62 15.25 24 15.86 23.88C20.63 22.29 24 17.8 24 12.5C24 5.87 18.63 0.5 12 0.5Z"
 					/>

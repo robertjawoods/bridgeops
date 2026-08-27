@@ -26,7 +26,9 @@ export const fakeQueue = (
  * routes exist and every authenticated test would 401 for the wrong reason. Always go
  * through this helper.
  */
-export const buildTestApp = ({ queue = fakeQueue() }: { queue?: JobQueue } = {}) => {
+export const buildTestApp = ({
+	queue = fakeQueue(),
+}: { queue?: JobQueue } = {}) => {
 	const { app } = createApp({
 		rootLogger: pino({ level: "silent" }),
 		api: createV1({ queue }),

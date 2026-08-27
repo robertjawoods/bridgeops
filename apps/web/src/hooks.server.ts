@@ -7,7 +7,7 @@ import { auth } from "$lib/auth";
 import { logger } from "$lib/logger";
 
 const handleBetterAuth: Handle = async ({ event, resolve }) => {
-	let session: Awaited<ReturnType<typeof auth.api.getSession>> | null = null;
+	let session: Awaited<ReturnType<typeof auth.api.getSession>>;
 
 	try {
 		session = await auth.api.getSession({ headers: event.request.headers });

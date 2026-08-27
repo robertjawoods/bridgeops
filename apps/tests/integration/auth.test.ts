@@ -27,7 +27,9 @@ describe("requireAuth", () => {
 			["a lowercase bearer scheme", "bearer some-token"],
 			["an empty header", ""],
 		])("%s", async (_label, authorization) => {
-			const response = await request(buildTestApp(), protectedPath, { authorization });
+			const response = await request(buildTestApp(), protectedPath, {
+				authorization,
+			});
 
 			expect(response.status).toBe(401);
 			expect(await response.json()).toEqual({
@@ -68,7 +70,9 @@ describe("requireAuth", () => {
 		});
 
 		it("a token with the wrong audience", async () => {
-			const token = await jwks().signToken({ audience: "https://evil.example" });
+			const token = await jwks().signToken({
+				audience: "https://evil.example",
+			});
 
 			const response = await request(buildTestApp(), protectedPath, {
 				authorization: `Bearer ${token}`,
@@ -103,7 +107,9 @@ describe("requireAuth", () => {
 		it("a valid token", async () => {
 			const user = await createUserWithWorkspace();
 
-			const response = await request(buildTestApp(), protectedPath, { as: user.user.id });
+			const response = await request(buildTestApp(), protectedPath, {
+				as: user.user.id,
+			});
 
 			expect(response.status).toBe(200);
 		});
@@ -114,10 +120,16 @@ describe("requireAuth", () => {
 			const alice = await createUserWithWorkspace({ slug: "alice-workspace" });
 			const bob = await createUserWithWorkspace({ slug: "bob-workspace" });
 
-			const response = await request(buildTestApp(), protectedPath, { as: alice.user.id });
-			const body = (await response.json()) as { workspaces: { slug: string }[] };
+			const response = await request(buildTestApp(), protectedPath, {
+				as: alice.user.id,
+			});
+			const body = (await response.json()) as {
+				workspaces: { slug: string }[];
+			};
 
-			expect(body.workspaces.map((workspace) => workspace.slug)).toEqual(["alice-workspace"]);
+			expect(body.workspaces.map((workspace) => workspace.slug)).toEqual([
+				"alice-workspace",
+			]);
 			expect(bob.workspace.slug).toBe("bob-workspace");
 		});
 	});

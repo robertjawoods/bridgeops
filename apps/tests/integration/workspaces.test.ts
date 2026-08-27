@@ -23,14 +23,19 @@ const validationIssues = async (response: Response) => {
 		error: { name: string; message: string };
 	};
 
-	return JSON.parse(body.error.message) as { path: string[]; message: string }[];
+	return JSON.parse(body.error.message) as {
+		path: string[];
+		message: string;
+	}[];
 };
 
 describe("GET /api/v1/workspaces", () => {
 	it("returns an empty list for a user with no memberships", async () => {
 		const user = await createUser();
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces", { as: user.id });
+		const response = await request(buildTestApp(), "/api/v1/workspaces", {
+			as: user.id,
+		});
 
 		expect(response.status).toBe(200);
 		expect(await response.json()).toEqual({ workspaces: [] });
@@ -41,7 +46,9 @@ describe("GET /api/v1/workspaces", () => {
 		await createWorkspaceForUser(user.id, { slug: "first" });
 		await createWorkspaceForUser(user.id, { slug: "second" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces", { as: user.id });
+		const response = await request(buildTestApp(), "/api/v1/workspaces", {
+			as: user.id,
+		});
 		const body = (await response.json()) as { workspaces: { slug: string }[] };
 
 		expect(response.status).toBe(200);
@@ -56,17 +63,25 @@ describe("GET /api/v1/workspaces", () => {
 		await createWorkspaceForUser(user.id, { slug: "mine" });
 		await createWorkspace({ slug: "someone-elses" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces", { as: user.id });
+		const response = await request(buildTestApp(), "/api/v1/workspaces", {
+			as: user.id,
+		});
 		const body = (await response.json()) as { workspaces: { slug: string }[] };
 
-		expect(body.workspaces.map((workspace) => workspace.slug)).toEqual(["mine"]);
+		expect(body.workspaces.map((workspace) => workspace.slug)).toEqual([
+			"mine",
+		]);
 	});
 
 	it("serialises the workspace shape the OpenAPI schema advertises", async () => {
 		const { user } = await createUserWithWorkspace({ slug: "shaped" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces", { as: user.id });
-		const body = (await response.json()) as { workspaces: Record<string, unknown>[] };
+		const response = await request(buildTestApp(), "/api/v1/workspaces", {
+			as: user.id,
+		});
+		const body = (await response.json()) as {
+			workspaces: Record<string, unknown>[];
+		};
 
 		expect(body.workspaces[0]).toMatchObject({
 			slug: "shaped",
@@ -83,7 +98,9 @@ describe("GET /api/v1/workspaces", () => {
 	it("404s on the trailing-slash form because the app is in strict mode", async () => {
 		const user = await createUser();
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/", { as: user.id });
+		const response = await request(buildTestApp(), "/api/v1/workspaces/", {
+			as: user.id,
+		});
 
 		expect(response.status).toBe(404);
 	});
@@ -166,12 +183,28 @@ describe("POST /api/v1/workspaces", () => {
 		it.each([
 			["an empty name", { name: "", slug: "platform" }, "name"],
 			["a whitespace-only name", { name: "   ", slug: "platform" }, "name"],
-			["a name over 100 characters", { name: "a".repeat(101), slug: "platform" }, "name"],
+			[
+				"a name over 100 characters",
+				{ name: "a".repeat(101), slug: "platform" },
+				"name",
+			],
 			["an empty slug", { name: "Platform", slug: "" }, "slug"],
-			["a slug over 50 characters", { name: "Platform", slug: "a".repeat(51) }, "slug"],
+			[
+				"a slug over 50 characters",
+				{ name: "Platform", slug: "a".repeat(51) },
+				"slug",
+			],
 			["an uppercase slug", { name: "Platform", slug: "Platform" }, "slug"],
-			["a slug with underscores", { name: "Platform", slug: "bad_slug" }, "slug"],
-			["a slug with a trailing hyphen", { name: "Platform", slug: "platform-" }, "slug"],
+			[
+				"a slug with underscores",
+				{ name: "Platform", slug: "bad_slug" },
+				"slug",
+			],
+			[
+				"a slug with a trailing hyphen",
+				{ name: "Platform", slug: "platform-" },
+				"slug",
+			],
 			["a missing name", { slug: "platform" }, "name"],
 			["a missing slug", { name: "Platform" }, "slug"],
 		])("rejects %s", async (_label, json, expectedField) => {
@@ -187,7 +220,9 @@ describe("POST /api/v1/workspaces", () => {
 
 			const issues = await validationIssues(response);
 
-			expect(issues.map((issue) => issue.path.join("."))).toContain(expectedField);
+			expect(issues.map((issue) => issue.path.join("."))).toContain(
+				expectedField,
+			);
 		});
 
 		it("does not persist a workspace when validation fails", async () => {
@@ -213,7 +248,10 @@ describe("POST /api/v1/workspaces", () => {
 
 			const issues = await validationIssues(response);
 
-			expect(issues.map((issue) => issue.path.join("."))).toEqual(["name", "slug"]);
+			expect(issues.map((issue) => issue.path.join("."))).toEqual([
+				"name",
+				"slug",
+			]);
 		});
 	});
 });
@@ -222,12 +260,18 @@ describe("GET /api/v1/workspaces/:slug", () => {
 	it("returns a workspace the user belongs to", async () => {
 		const { user } = await createUserWithWorkspace({ slug: "platform" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/platform", {
-			as: user.id,
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/platform",
+			{
+				as: user.id,
+			},
+		);
 
 		expect(response.status).toBe(200);
-		expect(await response.json()).toMatchObject({ workspace: { slug: "platform" } });
+		expect(await response.json()).toMatchObject({
+			workspace: { slug: "platform" },
+		});
 	});
 
 	// This route attaches `workspaceAuthorisation` via `createRoute({ middleware })`, so
@@ -238,7 +282,9 @@ describe("GET /api/v1/workspaces/:slug", () => {
 	// whether or not it is the one they last switched to.
 	it("returns a non-active workspace the user belongs to", async () => {
 		const user = await createUser();
-		const active = await createWorkspaceForUser(user.id, { slug: "active-one" });
+		const active = await createWorkspaceForUser(user.id, {
+			slug: "active-one",
+		});
 		await createWorkspaceForUser(user.id, { slug: "other-one" });
 
 		await prisma.user.update({
@@ -246,21 +292,31 @@ describe("GET /api/v1/workspaces/:slug", () => {
 			data: { activeWorkspaceId: active.id },
 		});
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/other-one", {
-			as: user.id,
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/other-one",
+			{
+				as: user.id,
+			},
+		);
 
 		expect(response.status).toBe(200);
-		expect(await response.json()).toMatchObject({ workspace: { slug: "other-one" } });
+		expect(await response.json()).toMatchObject({
+			workspace: { slug: "other-one" },
+		});
 	});
 
 	it("403s for a workspace the user is not a member of", async () => {
 		const outsider = await createUser();
 		await createWorkspace({ slug: "private-workspace" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/private-workspace", {
-			as: outsider.id,
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/private-workspace",
+			{
+				as: outsider.id,
+			},
+		);
 
 		expect(response.status).toBe(403);
 		expect(await response.json()).toEqual({ error: "Forbidden" });
@@ -269,13 +325,18 @@ describe("GET /api/v1/workspaces/:slug", () => {
 	it("403s for an unknown slug", async () => {
 		const user = await createUser();
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/nope", { as: user.id });
+		const response = await request(buildTestApp(), "/api/v1/workspaces/nope", {
+			as: user.id,
+		});
 
 		expect(response.status).toBe(403);
 	});
 
 	it("requires authentication", async () => {
-		const response = await request(buildTestApp(), "/api/v1/workspaces/platform");
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/platform",
+		);
 
 		expect(response.status).toBe(401);
 	});
@@ -283,13 +344,19 @@ describe("GET /api/v1/workspaces/:slug", () => {
 
 describe("POST /api/v1/workspaces/switch", () => {
 	it("sets the user's active workspace", async () => {
-		const { user, workspace } = await createUserWithWorkspace({ slug: "platform" });
-
-		const response = await request(buildTestApp(), "/api/v1/workspaces/switch", {
-			method: "POST",
-			as: user.id,
-			json: { slug: "platform" },
+		const { user, workspace } = await createUserWithWorkspace({
+			slug: "platform",
 		});
+
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/switch",
+			{
+				method: "POST",
+				as: user.id,
+				json: { slug: "platform" },
+			},
+		);
 
 		expect(response.status).toBe(200);
 		expect(await response.json()).toEqual({
@@ -338,11 +405,15 @@ describe("POST /api/v1/workspaces/switch", () => {
 	it("is not intercepted by the workspace guard", async () => {
 		const { user } = await createUserWithWorkspace({ slug: "platform" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/switch", {
-			method: "POST",
-			as: user.id,
-			json: { slug: "platform" },
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/switch",
+			{
+				method: "POST",
+				as: user.id,
+				json: { slug: "platform" },
+			},
+		);
 
 		expect(response.status).not.toBe(403);
 	});
@@ -350,11 +421,15 @@ describe("POST /api/v1/workspaces/switch", () => {
 	it("404s for an unknown slug", async () => {
 		const user = await createUser();
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/switch", {
-			method: "POST",
-			as: user.id,
-			json: { slug: "no-such-workspace" },
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/switch",
+			{
+				method: "POST",
+				as: user.id,
+				json: { slug: "no-such-workspace" },
+			},
+		);
 
 		expect(response.status).toBe(404);
 		expect(await response.json()).toEqual({ error: "Workspace not found" });
@@ -368,11 +443,15 @@ describe("POST /api/v1/workspaces/switch", () => {
 		await createWorkspaceForUser(user.id, { slug: "switch" });
 		const target = await createWorkspaceForUser(user.id, { slug: "platform" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/switch", {
-			method: "POST",
-			as: user.id,
-			json: { slug: "platform" },
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/switch",
+			{
+				method: "POST",
+				as: user.id,
+				json: { slug: "platform" },
+			},
+		);
 
 		expect(response.status).toBe(200);
 
@@ -385,27 +464,37 @@ describe("POST /api/v1/workspaces/switch", () => {
 		const outsider = await createUser();
 		await createWorkspace({ slug: "private-workspace" });
 
-		const response = await request(buildTestApp(), "/api/v1/workspaces/switch", {
-			method: "POST",
-			as: outsider.id,
-			json: { slug: "private-workspace" },
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/switch",
+			{
+				method: "POST",
+				as: outsider.id,
+				json: { slug: "private-workspace" },
+			},
+		);
 
 		// 404, not 403: the guard does not run here, so the service answers — and it
 		// scopes its lookup by membership, so a non-member is indistinguishable from a
 		// workspace that does not exist.
 		expect(response.status).toBe(404);
 
-		const updated = await prisma.user.findUnique({ where: { id: outsider.id } });
+		const updated = await prisma.user.findUnique({
+			where: { id: outsider.id },
+		});
 
 		expect(updated?.activeWorkspaceId).toBeNull();
 	});
 
 	it("requires authentication", async () => {
-		const response = await request(buildTestApp(), "/api/v1/workspaces/switch", {
-			method: "POST",
-			json: { slug: "platform" },
-		});
+		const response = await request(
+			buildTestApp(),
+			"/api/v1/workspaces/switch",
+			{
+				method: "POST",
+				json: { slug: "platform" },
+			},
+		);
 
 		expect(response.status).toBe(401);
 	});
@@ -446,7 +535,9 @@ describe("validation error contract", () => {
 			json: { name: "", slug: "platform" },
 		});
 
-		expect(validationErrorSchema.safeParse(await response.json())).toMatchObject({
+		expect(
+			validationErrorSchema.safeParse(await response.json()),
+		).toMatchObject({
 			success: true,
 		});
 	});

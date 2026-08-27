@@ -31,9 +31,9 @@ describe("handleError", () => {
 		[ERROR_CODES.VALIDATION_ERROR, 422],
 		[ERROR_CODES.INTERNAL_ERROR, 500],
 	])("maps %s to %i", async (code, status) => {
-		const response = await buildHarness(new AppError(code, "something went wrong")).request(
-			"/boom",
-		);
+		const response = await buildHarness(
+			new AppError(code, "something went wrong"),
+		).request("/boom");
 
 		expect(response.status).toBe(status);
 	});
@@ -47,9 +47,9 @@ describe("handleError", () => {
 	});
 
 	it("falls back to 500 for an unrecognised error code", async () => {
-		const response = await buildHarness(new AppError("NOT_A_REAL_CODE", "mystery")).request(
-			"/boom",
-		);
+		const response = await buildHarness(
+			new AppError("NOT_A_REAL_CODE", "mystery"),
+		).request("/boom");
 
 		expect(response.status).toBe(500);
 	});
@@ -59,9 +59,11 @@ describe("handleError", () => {
 	// application code throws one directly, in which case it is an unexpected error and
 	// is masked like any other.
 	it("treats a ZodError as an unexpected error", async () => {
-		const result = z.object({ name: z.string().min(1, "Name is required") }).safeParse({
-			name: "",
-		});
+		const result = z
+			.object({ name: z.string().min(1, "Name is required") })
+			.safeParse({
+				name: "",
+			});
 
 		const response = await buildHarness(result.error).request("/boom");
 

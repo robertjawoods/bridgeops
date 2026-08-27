@@ -1,11 +1,11 @@
 <script lang="ts">
-import { enhance } from "$app/forms";
-import { page } from "$app/state";
-import type { ActionData } from "./$types";
+	import { enhance } from "$app/forms";
+	import { page } from "$app/state";
+	import type { ActionData } from "./$types";
 
-const _token = page.url.searchParams.get("token");
+	const _token = page.url.searchParams.get("token");
 
-let { form }: { form: ActionData | null } = $props();
+	let { form }: { form: ActionData | null } = $props();
 </script>
 
 <section class="mx-auto max-w-4xl px-4 py-10 sm:py-14">
@@ -13,11 +13,11 @@ let { form }: { form: ActionData | null } = $props();
 		<h1 class="text-center text-4xl text-white">Reset your password</h1>
 		<form
 			method="POST"
-			action={`?/reset`}
+			action="?/reset"
 			use:enhance
 			class="flex flex-col gap-5 rounded-[16px] border border-[#1f2433] bg-[#151621] p-5"
 		>
-			<input type="hidden" value={_token} name="token"/>
+			<input type="hidden" value={_token} name="token" />
 			<label class="flex flex-col gap-1" for="password">
 				<span class="text-sm font-medium text-[#c9d3ee]">Password</span>
 				<input
@@ -51,7 +51,10 @@ let { form }: { form: ActionData | null } = $props();
 		</form>
 
 		<p class="text-center text-sm text-[#646e87]">
-			<a href="/login" class="font-medium text-[#98a4f7] underline underline-offset-4">
+			<a
+				href="/login"
+				class="font-medium text-[#98a4f7] underline underline-offset-4"
+			>
 				Back to log in
 			</a>
 		</p>

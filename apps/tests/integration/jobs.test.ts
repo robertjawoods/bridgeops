@@ -45,7 +45,9 @@ describe("POST /api/v1/jobs", () => {
 		// `handleError` echoes an AppError's message whatever its code, so the
 		// developer-authored INTERNAL_ERROR text is surfaced to the client here.
 		// Only non-AppError throwables are masked as "Internal server error".
-		expect(await response.json()).toEqual({ error: "Job was created without an ID" });
+		expect(await response.json()).toEqual({
+			error: "Job was created without an ID",
+		});
 	});
 
 	it("requires authentication", async () => {

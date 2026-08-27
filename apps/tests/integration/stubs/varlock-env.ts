@@ -14,7 +14,8 @@
 export const ENV: Record<string, string | undefined> = new Proxy(
 	{},
 	{
-		get: (_target, key) => (typeof key === "string" ? process.env[key] : undefined),
+		get: (_target, key) =>
+			typeof key === "string" ? process.env[key] : undefined,
 		has: (_target, key) => typeof key === "string" && key in process.env,
 		ownKeys: () => Reflect.ownKeys(process.env),
 		getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }),

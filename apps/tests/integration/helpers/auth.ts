@@ -33,7 +33,12 @@ export const startJwksServer = async (): Promise<JwksServer> => {
 	const { publicKey, privateKey } = await generateKeyPair(ALG);
 	const foreign = await generateKeyPair(ALG);
 
-	const publicJwk: JWK = { ...(await exportJWK(publicKey)), alg: ALG, use: "sig", kid: "test-key" };
+	const publicJwk: JWK = {
+		...(await exportJWK(publicKey)),
+		alg: ALG,
+		use: "sig",
+		kid: "test-key",
+	};
 
 	const server: Server = createServer((req, res) => {
 		if (req.url === "/api/auth/jwks") {
@@ -76,7 +81,8 @@ export const startJwksServer = async (): Promise<JwksServer> => {
 	return {
 		origin,
 		signToken: (options) => sign(privateKey as CryptoKey, options),
-		signWithForeignKey: (options) => sign(foreign.privateKey as CryptoKey, options),
+		signWithForeignKey: (options) =>
+			sign(foreign.privateKey as CryptoKey, options),
 		close: () => new Promise<void>((resolve) => server.close(() => resolve())),
 	};
 };
@@ -90,7 +96,9 @@ export const setActiveJwksServer = (server: JwksServer | undefined) => {
 
 export const jwks = (): JwksServer => {
 	if (!activeServer) {
-		throw new Error("JWKS test server is not running — is setup.ts registered as a setupFile?");
+		throw new Error(
+			"JWKS test server is not running — is setup.ts registered as a setupFile?",
+		);
 	}
 
 	return activeServer;
